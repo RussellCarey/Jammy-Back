@@ -35,7 +35,7 @@ export class JamController {
   async getAllJams(
     @Query('skip', OptionalIntPipe) skip?: number,
     @Query('take', OptionalIntPipe) take?: number,
-    @Query('order', OrderByPipe) order?: Record<string, 'ASC' | 'DESC'>,
+    @Query('order', OrderByPipe) order?: Record<string, 'asc' | 'desc'>,
   ): Promise<any> {
     const products = await this.jamServices.getAllJams({
       skip,
@@ -48,7 +48,6 @@ export class JamController {
   // Create product
   @Post()
   async createJam(@Body() body: JamDTO) {
-    console.log(body);
     const createdJam = await this.jamServices.createJam(body);
     return {
       message: `Created a new jam`,
@@ -59,10 +58,9 @@ export class JamController {
   // Update a product
   @Patch(':jamId')
   async updateProduct(
-    @Body() body: JamDTO,
+    @Body() body: JamUpdateDTO,
     @Param('jamId', ParseIntPipe) jamId: number,
   ) {
-    console.log(body);
     const updatedProduct = await this.jamServices.updateJam(jamId, body);
     return { message: `Updated a jam`, data: updatedProduct, status: true };
   }

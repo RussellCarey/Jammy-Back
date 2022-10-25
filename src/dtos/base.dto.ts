@@ -1,17 +1,6 @@
-import {
-  IsNumber,
-  IsString,
-  IsOptional,
-  IsBoolean,
-  IsDateString,
-} from 'class-validator';
-import { BaseEntity } from 'src/entities/base.entity';
+import { IsNumber, IsString, IsOptional, IsBoolean } from 'class-validator';
 
 class BaseEntityDTO {
-  @IsOptional()
-  @IsNumber()
-  id: number;
-
   @IsOptional()
   @IsBoolean()
   isActive: boolean;

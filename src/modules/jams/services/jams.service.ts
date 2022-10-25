@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Jam } from '../entities/jams.entity';
 import { Repository, ILike } from 'typeorm';
 import { JamDTO } from '../dtos/jams.dto';
+import { JamUpdateDTO } from '../dtos/jams.update.dto';
 
 @Injectable()
 export class JamServices {
@@ -21,14 +22,12 @@ export class JamServices {
   }
 
   async getAllJams(params: {
+    order?: any;
     skip?: number;
     take?: number;
-    order?: any;
     where?: any;
   }): Promise<Jam[]> {
     const { skip, take, order, where } = params;
-    console.log(skip, take, order);
-
     const jams = await this.jamRepository.find({
       skip,
       take,
@@ -44,7 +43,7 @@ export class JamServices {
     return jam;
   }
 
-  async updateJam(id: number, jamData: JamDTO): Promise<any> {
+  async updateJam(id: number, jamData: JamUpdateDTO): Promise<Jam> {
     // const jam = await this.jamRepository.update(id, jamData);
     const result = await this.jamRepository
       .createQueryBuilder()

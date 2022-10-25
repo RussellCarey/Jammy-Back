@@ -1,7 +1,8 @@
 // item.entity.ts
-import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../entities/base.entity';
-// import { User } from 'src/modules/users/entities/User.entity';
+import { User } from 'src/modules/users/entities/User.entity';
+import { JamsUsers } from './jamsUsers.join.entity';
 
 @Entity({ name: 'jams' })
 export class Jam extends BaseEntity {
@@ -41,7 +42,12 @@ export class Jam extends BaseEntity {
   // @JoinColumn({ name: 'seller_id' })
   // seller_id: number;
 
-  // @ManyToOne(() => User, (user) => user.id)
-  // @JoinColumn({ name: 'buyer_id' })
-  // buyer_id: number;
+  // Usual way of doing it without extra info
+  @ManyToMany(() => User, (user) => user.id)
+  @JoinTable()
+  participant_id: number;
+
+  // Custom join table with extra info
+  @OneToMany(() => JamsUsers, (jamsUsers) => jamsUsers.jams)
+  public jams_users!: JamsUsers[];
 }

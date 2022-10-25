@@ -1,32 +1,32 @@
-import { IsNumber, IsString, IsOptional } from 'class-validator';
+import { IsNumber, IsString, IsNotEmpty } from 'class-validator';
 import { BaseEntityDTO } from 'src/dtos/base.dto';
 
 class JamDTO extends BaseEntityDTO {
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   jam_title: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   jam_description: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   jam_image: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   jam_brief: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsNumber()
   launch_date: number;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsNumber()
   start_date: number;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsNumber()
   end_date: number;
 }
