@@ -3,9 +3,6 @@ import { Entity, Column, OneToMany } from 'typeorm';
 import { IsInt, Length, IsEmail, IsFQDN, IsString } from 'class-validator';
 
 import { BaseEntity } from '../../../entities/base.entity';
-import { ProductComment } from 'src/modules/products/entities/ProductComment.entity';
-import { Product } from 'src/modules/products/entities/Product.entity';
-
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
   //
@@ -42,14 +39,14 @@ export class User extends BaseEntity {
   image: string;
 
   // Relations
-  @OneToMany(() => ProductComment, (comment) => comment.product_id)
-  comments: ProductComment[];
+  // @OneToMany(() => ProductComment, (comment) => comment.product_id)
+  // comments: ProductComment[];
 
-  @OneToMany(() => Product, (product) => product.buyer_id)
-  bought_products: Product[];
+  // @OneToMany(() => Product, (product) => product.buyer_id)
+  // bought_products: Product[];
 
-  @OneToMany(() => Product, (product) => product.seller_id)
-  products: Product[];
+  // @OneToMany(() => Product, (product) => product.seller_id)
+  // products: Product[];
 
   // Functions
   public set _id(id: number) {

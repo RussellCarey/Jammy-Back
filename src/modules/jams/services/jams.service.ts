@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Jam } from 'src/modules/products/entities/jam.entity';
+import { Jam } from '../entities/jams.entity';
 import { Repository, ILike } from 'typeorm';
 import { JamDTO } from '../dtos/jams.dto';
 
@@ -15,7 +15,7 @@ export class JamServices {
 
   async getJamByName(term: string): Promise<Jam> {
     const jam = await this.jamRepository.findOne({
-      where: { product_name: ILike(`%${term}%`) },
+      where: { jam_title: ILike(`%${term}%`) },
     });
     return jam;
   }
@@ -38,9 +38,23 @@ export class JamServices {
     return jams;
   }
 
-  async createProduct(prod: JamDTO): Promise<Jam> {
-    const jam = await this.jamRepository.save(prod);
-    console.log(jam);
+  async createJam(jamData: JamDTO): Promise<Jam> {
+    console.log(jamData);
+    const jam = await this.jamRepository.save(jamData);
     return jam;
+  }
+
+  async updateJam(id: number, jamData: JamDTO): Promise<any> {
+    // const jam = await this.jamRepository.update(id, jamData);
+    const result = await this.jamRepository
+      .createQueryBuilder()
+      .update<Jam>(Jam, { ...jamData })
+      .where({
+        id: id,
+      })
+      .returning('*')
+      .execute();
+
+    return result.raw[0];
   }
 }

@@ -8,7 +8,6 @@ import { Request, Response } from 'express';
 
 // In order to catch every unhandled exception (regardless of the exception type),
 // leave the @Catch() decorator's parameter list empty, e.g., @Catch().
-
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {

@@ -10,10 +10,11 @@ import {
 } from '@nestjs/common';
 import { OrderByPipe } from 'src/pipes/orderby.pipe';
 import { OptionalIntPipe } from 'src/pipes/optionalInt.pipe';
-import { JamServices } from '../services/jam.service';
+import { JamServices } from '../services/jams.service';
 import { JamDTO } from '../dtos/jams.dto';
+import { JamUpdateDTO } from '../dtos/jams.update.dto';
 
-@Controller('products')
+@Controller('jams')
 export class JamController {
   constructor(private readonly jamServices: JamServices) {}
   // Ordering matters.
@@ -21,17 +22,15 @@ export class JamController {
   @Get('search')
   async searchForJamByName(@Query('term') term?: string): Promise<any> {
     const jam = await this.jamServices.getJamByName(term);
-    return { message: 'Retrieved product', data: jam };
+    return { message: 'Retrieved jams', data: jam };
   }
 
-  // Get single product by id
   @Get(':jamId')
   async getJam(@Param('jamId', ParseIntPipe) jamId: number): Promise<any> {
     const jam = await this.jamServices.getJamById(jamId);
-    return { message: 'Retrieved product', data: jam };
+    return { message: 'Retrieved jams', data: jam };
   }
 
-  // Get all products
   @Get()
   async getAllJams(
     @Query('skip', OptionalIntPipe) skip?: number,
@@ -43,29 +42,28 @@ export class JamController {
       take,
       order,
     });
-    return { message: 'Retrieved Products', data: products };
+    return { message: 'Retrieved jams', data: products };
   }
 
   // Create product
   @Post()
-  async create(@Body() body: JamDTO) {
+  async createJam(@Body() body: JamDTO) {
     console.log(body);
-    const createdProduct = await this.jamServices.createProduct(body);
+    const createdJam = await this.jamServices.createJam(body);
     return {
-      message: `Created a new product`,
-      data: createdProduct,
-      status: true,
+      message: `Created a new jam`,
+      data: createdJam,
     };
   }
 
   // Update a product
-  // @Patch(':jamId')
-  // async updateProduct(
-  //   @Body() body: ProductUpdateDTO,
-  //   @Param('jamId', ParseIntPipe) jamId: number,
-  // ) {
-  //   console.log(body);
-  //   const updatedProduct = await this.jamServices.updateProduct(jamId, body);
-  //   return { message: `Updated a product`, data: updatedProduct, status: true };
-  // }
+  @Patch(':jamId')
+  async updateProduct(
+    @Body() body: JamDTO,
+    @Param('jamId', ParseIntPipe) jamId: number,
+  ) {
+    console.log(body);
+    const updatedProduct = await this.jamServices.updateJam(jamId, body);
+    return { message: `Updated a jam`, data: updatedProduct, status: true };
+  }
 }
