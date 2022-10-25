@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
 
-class ProductDTO {
+class JamDTO {
   @IsNotEmpty()
   @IsString()
   product_name: string;
@@ -35,4 +35,4 @@ class ProductDTO {
   category_id: number;
 }
 
-export { ProductDTO };
+export { JamDTO };
