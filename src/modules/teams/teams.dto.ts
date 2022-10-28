@@ -1,34 +1,18 @@
-import { IsNumber, IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 import { BaseEntityDTO } from 'src/dtos/base.dto';
 
 class TeamDTO extends BaseEntityDTO {
   @IsNotEmpty()
   @IsString()
-  jam_title: string;
+  team_name: string;
 
   @IsNotEmpty()
   @IsString()
-  jam_description: string;
+  team_description: string;
 
   @IsNotEmpty()
   @IsString()
-  jam_image: string;
-
-  @IsNotEmpty()
-  @IsString()
-  jam_brief: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  launch_date: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  start_date: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  end_date: number;
+  team_image: string;
 }
 
 export { TeamDTO };

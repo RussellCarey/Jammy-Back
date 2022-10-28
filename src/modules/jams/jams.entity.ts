@@ -1,7 +1,7 @@
 // item.entity.ts
 import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/entities/base.entity';
-import { User } from '../users/User.entity';
+import { Team } from '../teams/teams.entity';
 
 @Entity({ name: 'jams' })
 export class Jam extends BaseEntity {
@@ -25,4 +25,8 @@ export class Jam extends BaseEntity {
 
   @Column()
   end_date: number;
+
+  // Relations
+  @OneToMany(() => Team, (team) => team.user)
+  teams: Team[];
 }

@@ -2,6 +2,7 @@
 import { Entity, Column, OneToMany } from 'typeorm';
 import { IsInt, Length, IsEmail, IsFQDN, IsString } from 'class-validator';
 import { BaseEntity } from '../../entities/base.entity';
+import { Team } from '../teams/teams.entity';
 
 //TODO - Set up another module for the join table?
 @Entity({ name: 'users' })
@@ -40,6 +41,8 @@ export class User extends BaseEntity {
   image: string;
 
   // Relations
+  @OneToMany(() => Team, (team) => team.user)
+  teams: Team[];
 
   // Functions
   public set _id(id: number) {

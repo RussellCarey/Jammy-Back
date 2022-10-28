@@ -1,28 +1,23 @@
 // item.entity.ts
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { BaseEntity } from 'src/entities/base.entity';
 import { User } from '../users/User.entity';
+import { Jam } from '../jams/jams.entity';
 
-@Entity({ name: 'jams' })
+@Entity({ name: 'teams' })
 export class Team extends BaseEntity {
   @Column({ type: 'varchar', length: 100 })
-  jam_title: string;
+  team_name: string;
 
   @Column({ type: 'varchar', length: 300 })
-  jam_description: string;
+  team_description: string;
 
   @Column({ type: 'varchar', length: 300 })
-  jam_image: string;
+  team_image: string;
 
-  @Column({})
-  jam_brief: string;
+  @ManyToOne(() => User, (user) => user.teams)
+  user: User[];
 
-  @Column()
-  launch_date: number;
-
-  @Column()
-  start_date: number;
-
-  @Column()
-  end_date: number;
+  @ManyToOne(() => Jam, (jam) => jam.teams)
+  jam: User;
 }

@@ -1,34 +1,15 @@
-import { IsNumber, IsString, IsOptional } from 'class-validator';
+import { IsString } from 'class-validator';
 import { BaseEntityDTO } from 'src/dtos/base.dto';
 
 class TeamUpdateDTO extends BaseEntityDTO {
-  @IsOptional()
   @IsString()
-  jam_title: string;
+  team_name: string;
 
-  @IsOptional()
   @IsString()
-  jam_description: string;
+  team_description: string;
 
-  @IsOptional()
   @IsString()
-  jam_image: string;
-
-  @IsOptional()
-  @IsString()
-  jam_brief: string;
-
-  @IsOptional()
-  @IsNumber()
-  launch_date: number;
-
-  @IsOptional()
-  @IsNumber()
-  start_date: number;
-
-  @IsOptional()
-  @IsNumber()
-  end_date: number;
+  team_image: string;
 }
 
 export { TeamUpdateDTO };
