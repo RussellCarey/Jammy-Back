@@ -10,15 +10,13 @@ import {
 } from '@nestjs/common';
 import { OrderByPipe } from 'src/pipes/orderby.pipe';
 import { OptionalIntPipe } from 'src/pipes/optionalInt.pipe';
-import { JamServices } from '../services/jams.service';
-import { JamDTO } from '../dtos/jams.dto';
-import { JamUpdateDTO } from '../dtos/jams.update.dto';
+import { JamServices } from './jams.service';
+import { JamDTO } from './jams.dto';
+import { JamUpdateDTO } from './jams.update.dto';
 
 @Controller('jams')
 export class JamController {
   constructor(private readonly jamServices: JamServices) {}
-  // Ordering matters.
-  // Get single product from searching name
   @Get('search')
   async searchForJamByName(@Query('term') term?: string): Promise<any> {
     const jam = await this.jamServices.getJamByName(term);

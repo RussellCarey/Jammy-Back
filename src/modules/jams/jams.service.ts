@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Jam } from '../entities/jams.entity';
+import { Jam } from './jams.entity';
 import { Repository, ILike } from 'typeorm';
-import { JamDTO } from '../dtos/jams.dto';
-import { JamUpdateDTO } from '../dtos/jams.update.dto';
+import { JamDTO } from './jams.dto';
+import { JamUpdateDTO } from './jams.update.dto';
 
 @Injectable()
 export class JamServices {

@@ -1,9 +1,9 @@
 // item.entity.ts
-import { Entity, Column, ManyToMany, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { IsInt, Length, IsEmail, IsFQDN, IsString } from 'class-validator';
-import { BaseEntity } from '../../../entities/base.entity';
-import { Jam } from 'src/modules/jams/entities/jams.entity';
-import { JamsUsers } from 'src/modules/jams/entities/jamsUsers.join.entity';
+import { BaseEntity } from '../../entities/base.entity';
+
+//TODO - Set up another module for the join table?
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
   //
@@ -40,21 +40,6 @@ export class User extends BaseEntity {
   image: string;
 
   // Relations
-  @ManyToMany(() => Jam, (jam) => jam.id)
-  jam_id: number;
-
-  // Custom join table with extra info
-  @OneToMany(() => JamsUsers, (jamsUsers) => jamsUsers.jams)
-  public jams_users!: JamsUsers[];
-
-  // @OneToMany(() => ProductComment, (comment) => comment.product_id)
-  // comments: ProductComment[];
-
-  // @OneToMany(() => Product, (product) => product.buyer_id)
-  // bought_products: Product[];
-
-  // @OneToMany(() => Product, (product) => product.seller_id)
-  // products: Product[];
 
   // Functions
   public set _id(id: number) {

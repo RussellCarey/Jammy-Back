@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Jam } from '../entities/jams.entity';
-import { JamController } from '../controllers/jams.controller';
-import { JamServices } from '../services/jams.service';
+import { Jam } from './jams.entity';
+import { JamController } from './jams.controller';
+import { JamServices } from './jams.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Jam])],
