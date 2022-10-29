@@ -1,4 +1,4 @@
-import { IsNumber, IsString, IsOptional } from 'class-validator';
+import { IsNumber, IsString, IsOptional, IsBoolean } from 'class-validator';
 import { BaseEntityDTO } from 'src/dtos/base.dto';
 
 class JamUpdateDTO extends BaseEntityDTO {
@@ -29,6 +29,10 @@ class JamUpdateDTO extends BaseEntityDTO {
   @IsOptional()
   @IsNumber()
   end_date: number;
+
+  @IsOptional()
+  @IsBoolean()
+  isAuthorized: boolean;
 }
 
 export { JamUpdateDTO };

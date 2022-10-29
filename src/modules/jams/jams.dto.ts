@@ -1,4 +1,4 @@
-import { IsNumber, IsString, IsNotEmpty } from 'class-validator';
+import { IsNumber, IsString, IsNotEmpty, IsBoolean } from 'class-validator';
 import { BaseEntityDTO } from 'src/dtos/base.dto';
 
 class JamDTO extends BaseEntityDTO {
@@ -29,6 +29,10 @@ class JamDTO extends BaseEntityDTO {
   @IsNotEmpty()
   @IsNumber()
   end_date: number;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  isAuthorized: boolean;
 }
 
 export { JamDTO };

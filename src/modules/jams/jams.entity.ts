@@ -20,11 +20,14 @@ export class Jam extends BaseEntity {
   @Column()
   launch_date: number;
 
-  @Column()
+  @Column({})
   start_date: number;
 
-  @Column()
+  @Column({})
   end_date: number;
+
+  @Column({ default: false })
+  isAuthorized: boolean;
 
   // Relations
   @OneToMany(() => Team, (team) => team.user)
