@@ -17,9 +17,10 @@ import { JamUpdateDTO } from './jams.update.dto';
 @Controller('jams')
 export class JamController {
   constructor(private readonly jamServices: JamServices) {}
+
   @Get('search')
-  async searchForJamByName(@Query('term') term?: string): Promise<any> {
-    const jam = await this.jamServices.getJamByName(term);
+  async searchForJamByName(@Query('name') name?: string): Promise<any> {
+    const jam = await this.jamServices.getJamByName(name);
     return { message: 'Retrieved jams', data: jam };
   }
 
@@ -43,7 +44,7 @@ export class JamController {
     return { message: 'Retrieved jams', data: products };
   }
 
-  // Create product
+  // Create jam
   @Post()
   async createJam(@Body() body: JamDTO) {
     const createdJam = await this.jamServices.createJam(body);
@@ -53,13 +54,13 @@ export class JamController {
     };
   }
 
-  // Update a product
+  // Update a jam
   @Patch(':jamId')
-  async updateProduct(
+  async updateJam(
     @Body() body: JamUpdateDTO,
     @Param('jamId', ParseIntPipe) jamId: number,
   ) {
-    const updatedProduct = await this.jamServices.updateJam(jamId, body);
-    return { message: `Updated a jam`, data: updatedProduct, status: true };
+    const updatedJam = await this.jamServices.updateJam(jamId, body);
+    return { message: `Updated a jam`, data: updatedJam, status: true };
   }
 }

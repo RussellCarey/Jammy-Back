@@ -10,13 +10,15 @@ export class JamServices {
   constructor(@InjectRepository(Jam) private jamRepository: Repository<Jam>) {}
 
   async getJamById(id: number): Promise<Jam> {
-    const jam = await this.jamRepository.findOneBy({ id: id });
+    const jam = await this.jamRepository.findOne({
+      where: { id: id, isAuthorized: true },
+    });
     return jam;
   }
 
   async getJamByName(term: string): Promise<Jam> {
     const jam = await this.jamRepository.findOne({
-      where: { jam_title: ILike(`%${term}%`) },
+      where: { jam_title: ILike(`%${term}%`), isAuthorized: true },
     });
     return jam;
   }
@@ -37,8 +39,22 @@ export class JamServices {
     return jams;
   }
 
+  async getAllUnauthorizedJams(params: {
+    order?: any;
+    skip?: number;
+    take?: number;
+  }): Promise<Jam[]> {
+    const { skip, take, order } = params;
+    const jams = await this.jamRepository.find({
+      skip,
+      take,
+      order,
+      where: { isAuthorized: false },
+    });
+    return jams;
+  }
+
   async createJam(jamData: JamDTO): Promise<Jam> {
-    console.log(jamData);
     const jam = await this.jamRepository.save(jamData);
     return jam;
   }
