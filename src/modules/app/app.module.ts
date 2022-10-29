@@ -5,14 +5,15 @@ import { JamModule } from '../jams/jams.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { TeamModule } from '../teams/teams.module';
 import { UserModule } from '../users/users.module';
+import { AuthModule } from 'src/modules/auth/auth.module';
 
-// Need to add MODULES to the imports
 @Module({
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+    UserModule,
     JamModule,
     TeamModule,
-    UserModule,
+    AuthModule,
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: 30,
