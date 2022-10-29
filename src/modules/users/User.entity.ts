@@ -1,5 +1,5 @@
 // item.entity.ts
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, Index } from 'typeorm';
 import { IsInt, Length, IsEmail, IsFQDN, IsString } from 'class-validator';
 import { BaseEntity } from '../../entities/base.entity';
 import { Team } from '../teams/teams.entity';
@@ -7,6 +7,7 @@ import { Team } from '../teams/teams.entity';
 //TODO - Set up another module for the join table?
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
+  @Index(['email'], { unique: true })
   //
   @Column({ type: 'varchar' })
   first_name: string;
@@ -23,6 +24,9 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar' })
   @Length(8, 50)
   password: string;
+
+  @Column({ default: false })
+  isAdmin: boolean;
 
   @Column({ type: 'int' })
   @IsInt()
