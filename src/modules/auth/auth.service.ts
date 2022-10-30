@@ -28,9 +28,11 @@ export class AuthService {
     if (!isMatch)
       throw new UnauthorizedException({ message: 'Incorrect password' });
 
-    const payload = { email: body.email };
-
-    return foundUser;
+    return {
+      id: foundUser.id,
+      email: foundUser.email,
+      isAdmin: foundUser.isAdmin,
+    };
   }
 
   async register(body) {
@@ -48,18 +50,5 @@ export class AuthService {
       ...body,
       password: null,
     };
-  }
-
-  async logout(body) {
-    // const userExists = await this.usersService.findOne(body.email);
-    // if (userExists)
-    //   throw new ConflictException({ message: 'Email already taken' });
-    // const hashedPassword = await bcrypt.hash(body.password, 10);
-    // // Save data into the DB
-    // this.usersService.save({ ...body, password: hashedPassword });
-    // return {
-    //   ...body,
-    //   password: null,
-    // };
   }
 }
