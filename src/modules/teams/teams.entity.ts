@@ -1,8 +1,9 @@
 // item.entity.ts
-import { Entity, Column, ManyToOne } from 'typeorm';
-import { BaseEntity } from 'src/entities/base.entity';
-import { User } from '../users/User.entity';
+import { Entity, Column, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+import { BaseEntity } from 'src/common/entities/base.entity';
+import { User } from '../users/user.entity';
 import { Jam } from '../jams/jams.entity';
+import { Project } from '../projects/projects.entity';
 
 @Entity({ name: 'teams' })
 export class Team extends BaseEntity {
@@ -19,5 +20,9 @@ export class Team extends BaseEntity {
   user: User[];
 
   @ManyToOne(() => Jam, (jam) => jam.teams)
-  jam: User;
+  jam: Jam[];
+
+  @OneToOne(() => Project, (project) => project.team)
+  @JoinColumn()
+  project: Project;
 }
