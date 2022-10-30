@@ -10,4 +10,4 @@ import { ProjectServices } from './projects.service';
   controllers: [ProjetController],
   providers: [ProjectServices],
 })
-export class TeamModule {}
+export class ProjectModule {}

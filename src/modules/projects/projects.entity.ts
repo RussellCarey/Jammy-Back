@@ -1,13 +1,14 @@
 // item.entity.ts
-import { Entity, Column, ManyToOne } from 'typeorm';
-import { BaseEntity } from 'src/entities/base.entity';
+import { Entity, Column, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { BaseEntity } from 'src/common/entities/base.entity';
+import { Team } from '../teams/teams.entity';
 
 @Entity({ name: 'projects' })
 export class Project extends BaseEntity {
   @Column({ type: 'varchar', length: 100 })
   project_title: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 300 })
   project_description: string;
 
   @Column({ type: 'varchar', length: 100 })
@@ -25,18 +26,21 @@ export class Project extends BaseEntity {
   @Column({ type: 'varchar', length: 100 })
   background_image: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 10 })
   text_color: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 10 })
   link_color: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 10 })
   background_color: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 10 })
   container_color: string;
 
   @Column({ type: 'int', default: 0 })
   views: number;
+
+  @OneToOne(() => Team, (team) => team.project)
+  team: Team;
 }

@@ -1,6 +1,6 @@
 // item.entity.ts
 import { Entity, Column, OneToMany } from 'typeorm';
-import { BaseEntity } from 'src/entities/base.entity';
+import { BaseEntity } from 'src/common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
 
 @Entity({ name: 'jams' })

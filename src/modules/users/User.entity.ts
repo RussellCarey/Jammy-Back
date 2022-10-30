@@ -1,7 +1,7 @@
 // item.entity.ts
 import { Entity, Column, OneToMany, Index } from 'typeorm';
 import { IsInt, Length, IsEmail, IsFQDN, IsString } from 'class-validator';
-import { BaseEntity } from '../../entities/base.entity';
+import { BaseEntity } from '../../common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
 
 //TODO - Set up another module for the join table?
@@ -28,6 +28,9 @@ export class User extends BaseEntity {
   @Column({ default: false })
   isAdmin: boolean;
 
+  @Column({ default: false })
+  isBanned: boolean;
+
   @Column({ type: 'int' })
   @IsInt()
   phone_number: number;
@@ -47,17 +50,4 @@ export class User extends BaseEntity {
   // Relations
   @OneToMany(() => Team, (team) => team.user)
   teams: Team[];
-
-  // Functions
-  public set _id(id: number) {
-    this.id = id;
-  }
-
-  public get _email(): string {
-    return this.email;
-  }
-
-  public set _email(email: string) {
-    this.email = email;
-  }
 }

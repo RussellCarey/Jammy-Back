@@ -6,6 +6,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { TeamModule } from '../teams/teams.module';
 import { UserModule } from '../users/users.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
+import { ProjectModule } from '../projects/projects.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -14,10 +16,12 @@ import { AuthModule } from 'src/modules/auth/auth.module';
     JamModule,
     TeamModule,
     AuthModule,
+    ProjectModule,
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: 30,
     }),
+    PassportModule.register({ session: true }),
   ],
   controllers: [],
   providers: [],

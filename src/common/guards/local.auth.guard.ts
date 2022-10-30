@@ -8,7 +8,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
 export class LocalAuthGuard extends AuthGuard('local') {
-  handleRequest(err, user, context) {
+  handleRequest(err, user, info, context, status) {
     const request = context.switchToHttp().getRequest();
     const { email, password } = request.body;
     if (err || !user) {
@@ -22,8 +22,6 @@ export class LocalAuthGuard extends AuthGuard('local') {
           { message: 'PLease include a password' },
           HttpStatus.OK,
         );
-      } else {
-        throw err || new UnauthorizedException();
       }
     }
     return user;

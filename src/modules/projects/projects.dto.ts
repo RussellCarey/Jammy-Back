@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
-import { BaseEntityDTO } from 'src/dtos/base.dto';
+import { BaseEntityDTO } from 'src/common/dtos/base.dto';
 
 class ProjectDTO extends BaseEntityDTO {
   @IsNotEmpty()
