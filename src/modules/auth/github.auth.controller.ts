@@ -7,58 +7,70 @@ import {
   Session,
   Request,
   Post,
+  UnauthorizedException,
+  Res,
 } from '@nestjs/common';
 import { GithubService } from './github.service';
 import { UserGuard } from 'src/common/guards/user.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from '../users/users.services';
 
-@Controller()
+@Controller('auth')
 export class GithubController {
   constructor(
     private readonly githubService: GithubService,
     private readonly userService: UsersService,
   ) {}
 
-  @Get('github')
+  @Get('login')
   @UseGuards(AuthGuard('github'))
   async githubAuth(@Req() req) {
     // Login to github
   }
 
-  @Get('auth/github')
+  @Get('github')
   @UseGuards(AuthGuard('github'))
   async githubAuthRedirect(
     @Session() session: Record<string, any>,
     @Req() req,
+    @Res() res,
   ) {
-    const loggedInUser = await this.githubService.githubLogin(req);
+    // Check for login success.
+    if (!req.user) throw new UnauthorizedException('No GitHub account found');
 
-    const existingUser = await this.userService.findOneByEmail(
-      loggedInUser.email,
-    );
+    // Check if we have existing user
+    let existingUser = await this.userService.findOneByEmail(req.user.email);
 
+    // Save new user
     if (!existingUser) {
-      await this.userService.save({
-        name: loggedInUser.name,
-        github_id: loggedInUser.id,
-        github_username: loggedInUser.login,
-        email: loggedInUser.email,
-        image: loggedInUser.image,
-      });
+      existingUser = await this.userService.save({ ...req.user });
     }
 
-    session.user = loggedInUser;
+    // Get details from new / current user.
+    const { id, github_id, email, name, github_username } = existingUser;
+
+    // Add to the session data,
+    session.user = {
+      id,
+      github_id,
+      email,
+      name,
+      github_username,
+      // image,
+      // accessToken: loggedInUser.accessToken,
+    };
+
     session.save();
 
-    return { message: 'Loggin in' };
+    // Redirect to homepage.
+    return res.redirect('https://www.github.com');
   }
 
-  @Get('auth/check')
+  @Get('check')
   githubCheck(@Session() session: Record<string, any>, @Req() req) {
     console.log('CHECK');
     console.log(session);
-    return { message: 'CHECKED SESSION' };
+    return { message: 'Checked session  ' };
   }
 
   @UseGuards(UserGuard)

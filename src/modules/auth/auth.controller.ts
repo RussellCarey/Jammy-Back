@@ -29,14 +29,4 @@ export class AuthController {
     session.save();
     return HttpStatus.OK;
   }
-
-  @UseGuards(UserGuard)
-  @Post('logout')
-  async logout(@Request() req) {
-    console.log(req.session);
-    req.session.user = null;
-    req.session.save();
-    req.session.destroy();
-    return HttpStatus.OK;
-  }
 }

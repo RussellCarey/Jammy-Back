@@ -24,14 +24,16 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   ): Promise<any> {
     const { name, avatar_url, login, id } = profile._json;
     const { emails } = profile;
+
     const user = {
-      id,
+      github_id: id,
       email: emails[0].value,
       name: name,
-      login: login,
+      github_username: login,
       image: avatar_url,
       accessToken,
     };
+
     done(null, user);
   }
 }
