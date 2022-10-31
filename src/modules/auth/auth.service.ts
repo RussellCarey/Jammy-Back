@@ -23,10 +23,10 @@ export class AuthService {
     if (!foundUser || !body.email)
       throw new NotFoundException({ message: 'Cannot find this user' });
 
-    // const isMatch = await bcrypt.compare(body.password, foundUser.password);
+    const isMatch = await bcrypt.compare(body.password, foundUser.password);
 
-    // if (!isMatch)
-    //   throw new UnauthorizedException({ message: 'Incorrect password' });
+    if (!isMatch)
+      throw new UnauthorizedException({ message: 'Incorrect password' });
 
     return {
       id: foundUser.id,
