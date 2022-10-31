@@ -1,16 +1,7 @@
 // item.entity.ts
-import {
-  Entity,
-  Column,
-  OneToOne,
-  BeforeInsert,
-  BeforeUpdate,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, OneToOne, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
-import { Jam } from '../jams/jams.entity';
 
 @Entity({ name: 'projects' })
 export class Project extends BaseEntity {
