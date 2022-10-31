@@ -10,20 +10,18 @@ export class User extends BaseEntity {
   @Index(['email'], { unique: true })
   //
   @Column({ type: 'varchar' })
-  first_name: string;
+  name: string;
 
   @Column({ type: 'varchar' })
-  @Length(2, 50)
-  second_name: string;
+  github_id: string;
+
+  @Column({ type: 'varchar' })
+  github_username: string;
 
   @Column({ type: 'varchar' })
   @IsEmail()
   @Length(2, 100)
   email: string;
-
-  @Column({ type: 'varchar' })
-  @Length(8, 50)
-  password: string;
 
   @Column({ default: false })
   isAdmin: boolean;
@@ -31,17 +29,9 @@ export class User extends BaseEntity {
   @Column({ default: false })
   isBanned: boolean;
 
-  @Column({ type: 'int' })
-  @IsInt()
-  phone_number: number;
-
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', default: '' })
   @IsString()
   stripe_customer_token: string;
-
-  @Column({ type: 'varchar' })
-  @IsString()
-  location: string;
 
   @Column({ type: 'varchar', length: 200 })
   @IsFQDN()

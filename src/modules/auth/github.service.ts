@@ -1,18 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class GithubService {
   async githubLogin(req) {
-    if (!req.user) {
-      return 'No user from Github';
-    }
-
-    // Save user to the DB
-
-    return {
-      message: 'User Info from Github',
-      user: req.user,
-    };
+    if (!req.user) throw new UnauthorizedException('No GitHub account found');
+    return req.user;
   }
 }
