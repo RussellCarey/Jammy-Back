@@ -1,5 +1,5 @@
 // item.entity.ts
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
 
@@ -7,6 +7,9 @@ import { Team } from '../teams/teams.entity';
 export class Jam extends BaseEntity {
   @Column({ type: 'varchar', length: 100 })
   jam_title: string;
+
+  @Column({ type: 'varchar', length: 100 })
+  jam_title_slug: string;
 
   @Column({ type: 'varchar', length: 300 })
   jam_description: string;
@@ -32,4 +35,11 @@ export class Jam extends BaseEntity {
   // Relations
   @OneToMany(() => Team, (team) => team.user)
   teams: Team[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  slugify() {
+    const slugged = this.jam_title.replace(' ', '-');
+    this.jam_title_slug = slugged.toLowerCase();
+  }
 }
