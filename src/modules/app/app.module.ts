@@ -8,6 +8,7 @@ import { UserModule } from '../users/users.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { ProjectModule } from '../projects/projects.module';
 import { PassportModule } from '@nestjs/passport';
+import { GithubModule } from '../auth/github.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PassportModule } from '@nestjs/passport';
     TeamModule,
     AuthModule,
     ProjectModule,
+    GithubModule,
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: 30,
