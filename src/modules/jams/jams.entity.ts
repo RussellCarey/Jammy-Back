@@ -2,7 +2,6 @@
 import { Entity, Column, OneToMany, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
-import { Project } from '../projects/projects.entity';
 
 @Entity({ name: 'jams' })
 export class Jam extends BaseEntity {
