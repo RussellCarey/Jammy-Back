@@ -6,11 +6,13 @@ import {
   HttpStatus,
   Session,
   Request,
-  Post,
   UnauthorizedException,
   Res,
+  Patch,
+  Delete,
+  Body,
 } from '@nestjs/common';
-import { GithubService } from './github.service';
+// import { GithubService } from './github.service';
 import { UserGuard } from 'src/common/guards/user.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from '../users/users.services';
@@ -18,14 +20,23 @@ import { UsersService } from '../users/users.services';
 @Controller('auth')
 export class GithubController {
   constructor(
-    private readonly githubService: GithubService,
+    // private readonly githubService: GithubService,
     private readonly userService: UsersService,
   ) {}
 
   @Get('login')
   @UseGuards(AuthGuard('github'))
   async githubAuth(@Req() req) {
-    // Login to github
+    /**/
+  }
+
+  @UseGuards(UserGuard)
+  @Get('logout')
+  async logout(@Session() session: Record<string, any>, @Request() req) {
+    session.user = null;
+    session.save();
+    session.destroy();
+    return HttpStatus.OK;
   }
 
   @Get('github')
@@ -42,9 +53,8 @@ export class GithubController {
     let existingUser = await this.userService.findOneByEmail(req.user.email);
 
     // Save new user
-    if (!existingUser) {
+    if (!existingUser)
       existingUser = await this.userService.save({ ...req.user });
-    }
 
     // Get details from new / current user.
     const { id, github_id, email, name, github_username } = existingUser;
@@ -56,30 +66,13 @@ export class GithubController {
       email,
       name,
       github_username,
-      // image,
-      // accessToken: loggedInUser.accessToken,
+      accessToken: req.user.accessToken,
+      // image
     };
 
     session.save();
 
-    // Redirect to homepage.
+    // Redirect to homepage (when made)
     return res.redirect('https://www.github.com');
-  }
-
-  @Get('check')
-  githubCheck(@Session() session: Record<string, any>, @Req() req) {
-    console.log('CHECK');
-    console.log(session);
-    return { message: 'Checked session  ' };
-  }
-
-  @UseGuards(UserGuard)
-  @Post('logout')
-  async logout(@Request() req) {
-    req.session.user = null;
-    req.session.save();
-    req.session.destroy();
-    req.logout();
-    return HttpStatus.OK;
   }
 }

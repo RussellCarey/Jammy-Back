@@ -69,7 +69,6 @@ export class JamServices {
       })
       .returning('*')
       .execute();
-
     return result.raw[0];
   }
 }

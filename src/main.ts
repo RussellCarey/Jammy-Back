@@ -16,6 +16,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.use(
+    // Get all sessions..?
+    // https://stackoverflow.com/questions/72076125/nest-js-getting-session-data-from-the-memory-store
     Session({
       name: 'SESH_ID',
       secret: process.env.SESSION_KEY,
