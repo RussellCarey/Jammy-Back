@@ -7,7 +7,9 @@ import {
   ParseIntPipe,
   Query,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
+import { LoggedInGuard } from 'src/common/guards/logged-in.guard';
 import { OrderByPipe } from 'src/pipes/orderby.pipe';
 import { OptionalIntPipe } from 'src/pipes/optionalInt.pipe';
 import { ProjectServices } from './projects.service';
@@ -29,7 +31,7 @@ export class ProjetController {
   }
 
   @Get(':projectId')
-  async getProject(
+  async get(
     @Param('projectId', ParseIntPipe) projectId: number,
   ): Promise<IResponse<Project>> {
     const project = await this.projectServices.getProjectById(projectId);
@@ -37,12 +39,12 @@ export class ProjetController {
   }
 
   @Get()
-  async getAllProjects(
+  async getAll(
     @Query('skip', OptionalIntPipe) skip?: number,
     @Query('take', OptionalIntPipe) take?: number,
     @Query('order', OrderByPipe) order?: Record<string, 'asc' | 'desc'>,
   ): Promise<IResponse<Project[]>> {
-    const projects = await this.projectServices.getAllProjetss({
+    const projects = await this.projectServices.getAllProjects({
       skip,
       take,
       order,
@@ -50,8 +52,9 @@ export class ProjetController {
     return { message: 'Retrieved projects', data: projects };
   }
 
+  @UseGuards(LoggedInGuard)
   @Post()
-  async createProject(@Body() body: ProjectDTO): Promise<IResponse<Project>> {
+  async create(@Body() body: ProjectDTO): Promise<IResponse<Project>> {
     const createdProject = await this.projectServices.createProject(body);
     return {
       message: `Created a new project`,
@@ -59,8 +62,9 @@ export class ProjetController {
     };
   }
 
+  @UseGuards(LoggedInGuard)
   @Patch(':projectId')
-  async updateProjet(
+  async update(
     @Body() body: ProjectUpdateDTO,
     @Param('projectId', ParseIntPipe) projectId: number,
   ): Promise<IResponse<Project>> {

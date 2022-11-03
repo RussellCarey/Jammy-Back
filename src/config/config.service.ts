@@ -46,7 +46,7 @@ class ConfigService {
       //     migrationsDir: 'src/migrations',
       //   },
 
-      ssl: this.isProduction(),
+      ssl: false,
     };
   }
 }

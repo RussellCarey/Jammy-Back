@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Team } from './teams.entity';
 import { Repository, ILike } from 'typeorm';
 import { TeamUpdateDTO } from './teams.update.dto';
+import { TeamDTO } from './teams.dto';
 
 @Injectable()
 export class TeamServices {
@@ -10,51 +11,54 @@ export class TeamServices {
     @InjectRepository(Team) private teamRepository: Repository<Team>,
   ) {}
 
-  // async getJamById(id: number): Promise<Jam> {
-  //   const jam = await this.jamRepository.findOneBy({ id: id });
-  //   return jam;
-  // }
+  async getTeamById(id: number): Promise<Team> {
+    const project = await this.teamRepository.findOneBy({ id: id });
+    return project;
+  }
 
-  // async getJamByName(term: string): Promise<Jam> {
-  //   const jam = await this.jamRepository.findOne({
-  //     where: { jam_title: ILike(`%${term}%`) },
-  //   });
-  //   return jam;
-  // }
+  async getTeamByName(term: string): Promise<Team> {
+    const project = await this.teamRepository.findOne({
+      where: { team_name: ILike(`%${term}%`) },
+    });
+    return project;
+  }
 
-  // async getAllJams(params: {
-  //   order?: any;
-  //   skip?: number;
-  //   take?: number;
-  //   where?: any;
-  // }): Promise<Jam[]> {
-  //   const { skip, take, order, where } = params;
-  //   const jams = await this.jamRepository.find({
-  //     skip,
-  //     take,
-  //     order,
-  //     where,
-  //   });
-  //   return jams;
-  // }
+  async getAllTeams(params: {
+    order?: any;
+    skip?: number;
+    take?: number;
+    where?: any;
+  }): Promise<Team[]> {
+    const { skip, take, order, where } = params;
+    const projects = await this.teamRepository.find({
+      skip,
+      take,
+      order,
+      where,
+    });
+    return projects;
+  }
 
-  // async createJam(jamData: JamDTO): Promise<Jam> {
-  //   console.log(jamData);
-  //   const jam = await this.jamRepository.save(jamData);
-  //   return jam;
-  // }
+  async create(teamData: TeamDTO): Promise<Team> {
+    const team = await this.teamRepository.save(teamData);
+    return team;
+  }
 
-  // async updateJam(id: number, jamData: JamUpdateDTO): Promise<Jam> {
-  //   // const jam = await this.jamRepository.update(id, jamData);
-  //   const result = await this.jamRepository
-  //     .createQueryBuilder()
-  //     .update<Jam>(Jam, { ...jamData })
-  //     .where({
-  //       id: id,
-  //     })
-  //     .returning('*')
-  //     .execute();
+  async update(id: number, teamData: TeamUpdateDTO): Promise<Team> {
+    const result = await this.teamRepository
+      .createQueryBuilder()
+      .update<Team>(Team, { ...teamData })
+      .where({
+        id: id,
+      })
+      .returning('*')
+      .execute();
 
-  //   return result.raw[0];
-  // }
+    return result.raw[0];
+  }
+
+  async delete(id: number): Promise<Team | undefined> {
+    const deletedTeam = await this.teamRepository.delete(id);
+    return deletedTeam.raw[0];
+  }
 }

@@ -13,7 +13,7 @@ import {
   Body,
 } from '@nestjs/common';
 // import { GithubService } from './github.service';
-import { UserGuard } from 'src/common/guards/user.guard';
+import { LoggedInGuard } from 'src/common/guards/logged-in.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from '../users/users.services';
 
@@ -30,7 +30,7 @@ export class GithubController {
     /**/
   }
 
-  @UseGuards(UserGuard)
+  @UseGuards(LoggedInGuard)
   @Get('logout')
   async logout(@Session() session: Record<string, any>, @Request() req) {
     session.user = null;
@@ -73,6 +73,6 @@ export class GithubController {
     session.save();
 
     // Redirect to homepage (when made)
-    return res.redirect('https://www.github.com');
+    return res.redirect('localhost:9432');
   }
 }

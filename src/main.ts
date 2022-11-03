@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './modules/app/app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { HttpExceptionFilter } from './common/exceptions/http-catch.exception';
+import { HttpErrorFilter } from './common/exceptions/http-catch.exception';
 import * as Session from 'express-session';
 import * as passort from 'passport';
 import helmet from 'helmet';
@@ -12,7 +12,7 @@ async function bootstrap() {
   app.use(helmet());
   app.enableCors();
   app.setGlobalPrefix('api');
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new HttpErrorFilter());
   app.useGlobalPipes(new ValidationPipe());
 
   app.use(
