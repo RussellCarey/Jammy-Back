@@ -23,7 +23,7 @@ export class ProjectServices {
     return project;
   }
 
-  async getAllProjetss(params: {
+  async getAllProjects(params: {
     order?: any;
     skip?: number;
     take?: number;
@@ -59,5 +59,10 @@ export class ProjectServices {
       .execute();
 
     return result.raw[0];
+  }
+
+  async delete(id: number): Promise<Project | undefined> {
+    const deletedProjet = await this.projectRepository.delete(id);
+    return deletedProjet.raw[0];
   }
 }

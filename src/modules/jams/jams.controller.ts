@@ -7,7 +7,9 @@ import {
   ParseIntPipe,
   Query,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
+import { LoggedInGuard } from 'src/common/guards/logged-in.guard';
 import { OrderByPipe } from 'src/pipes/orderby.pipe';
 import { OptionalIntPipe } from 'src/pipes/optionalInt.pipe';
 import { JamServices } from './jams.service';
@@ -44,23 +46,23 @@ export class JamController {
     return { message: 'Retrieved jams', data: products };
   }
 
-  // Create jam
+  @UseGuards(LoggedInGuard)
   @Post()
   async createJam(@Body() body: JamDTO) {
-    const createdJam = await this.jamServices.createJam(body);
+    const createdJam = await this.jamServices.create(body);
     return {
       message: `Created a new jam`,
       data: createdJam,
     };
   }
 
-  // Update a jam
+  @UseGuards(LoggedInGuard)
   @Patch(':jamId')
   async updateJam(
     @Body() body: JamUpdateDTO,
     @Param('jamId', ParseIntPipe) jamId: number,
   ) {
-    const updatedJam = await this.jamServices.updateJam(jamId, body);
+    const updatedJam = await this.jamServices.update(jamId, body);
     return { message: `Updated a jam`, data: updatedJam, status: true };
   }
 }

@@ -54,12 +54,12 @@ export class JamServices {
     return jams;
   }
 
-  async createJam(jamData: JamDTO): Promise<Jam> {
+  async create(jamData: JamDTO): Promise<Jam> {
     const jam = await this.jamRepository.save(jamData);
     return jam;
   }
 
-  async updateJam(id: number, jamData: JamUpdateDTO): Promise<Jam> {
+  async update(id: number, jamData: JamUpdateDTO): Promise<Jam> {
     // const jam = await this.jamRepository.update(id, jamData);
     const result = await this.jamRepository
       .createQueryBuilder()
@@ -69,7 +69,11 @@ export class JamServices {
       })
       .returning('*')
       .execute();
-
     return result.raw[0];
+  }
+
+  async delete(id: number): Promise<Jam | undefined> {
+    const deletedProjet = await this.jamRepository.delete(id);
+    return deletedProjet.raw[0];
   }
 }
