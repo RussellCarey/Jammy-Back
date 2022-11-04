@@ -1,8 +1,16 @@
 // item.entity.ts
-import { Entity, Column, OneToMany, Index } from 'typeorm';
+import {
+  Entity,
+  Column,
+  OneToMany,
+  Index,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { IsInt, Length, IsEmail, IsFQDN, IsString } from 'class-validator';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
+import { FavouritedProjects } from '../favourited-projects/favourited-projects.entity';
 
 //TODO - Set up another module for the join table?
 @Entity({ name: 'users' })
@@ -48,6 +56,10 @@ export class User extends BaseEntity {
   image: string;
 
   // Relations
-  @OneToMany(() => Team, (team) => team.user)
+  @ManyToMany(() => Team, (team) => team.users)
+  @JoinTable()
   teams: Team[];
+
+  @OneToMany(() => FavouritedProjects, (fav_projects) => fav_projects.user)
+  favourite_projects: FavouritedProjects[];
 }

@@ -8,15 +8,19 @@ import { UserModule } from '../users/users.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { ProjectModule } from '../projects/projects.module';
 import { PassportModule } from '@nestjs/passport';
+import { FavouritedProjectsModule } from '../favourited-projects/favourited-projects.module';
+import { SeedModule } from '../seed/seeder.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+    SeedModule,
     UserModule,
     JamModule,
     TeamModule,
     AuthModule,
     ProjectModule,
+    FavouritedProjectsModule,
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: 30,

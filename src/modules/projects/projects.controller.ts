@@ -8,6 +8,9 @@ import {
   Query,
   Patch,
   UseGuards,
+  Delete,
+  Session,
+  HttpStatus,
 } from '@nestjs/common';
 import { LoggedInGuard } from 'src/common/guards/logged-in.guard';
 import { OrderByPipe } from 'src/pipes/orderby.pipe';
@@ -73,5 +76,12 @@ export class ProjetController {
       body,
     );
     return { message: `Updated a project`, data: updatedProject };
+  }
+
+  @UseGuards(LoggedInGuard)
+  @Delete('delete')
+  async deleteUser(@Session() session: Record<string, any>) {
+    const deletedProject = await this.projectServices.delete(session.user.id);
+    return { status: HttpStatus.OK, data: deletedProject };
   }
 }

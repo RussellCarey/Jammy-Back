@@ -1,5 +1,14 @@
 // item.entity.ts
-import { Entity, Column, OneToMany, BeforeInsert, BeforeUpdate } from 'typeorm';
+import {
+  Entity,
+  Column,
+  OneToMany,
+  BeforeInsert,
+  BeforeUpdate,
+  CreateDateColumn,
+  ManyToMany,
+} from 'typeorm';
+import { IsDate } from 'class-validator';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
 
@@ -20,20 +29,23 @@ export class Jam extends BaseEntity {
   @Column({})
   jam_brief: string;
 
-  @Column()
-  launch_date: number;
+  @CreateDateColumn({ type: 'timestamptz' })
+  @IsDate()
+  launch_date: Date;
 
-  @Column({})
-  start_date: number;
+  @CreateDateColumn({ type: 'timestamptz' })
+  @IsDate()
+  start_date: Date;
 
-  @Column({})
-  end_date: number;
+  @CreateDateColumn({ type: 'timestamptz' })
+  @IsDate()
+  end_date: Date;
 
   @Column({ default: false })
   isAuthorized: boolean;
 
   // Relations
-  @OneToMany(() => Team, (team) => team.user)
+  @ManyToMany(() => Team, (team) => team.users)
   teams: Team[];
 
   @BeforeInsert()

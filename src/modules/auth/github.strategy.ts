@@ -1,5 +1,5 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, VerifyCallback } from 'passport-github2';
+import { Strategy } from 'passport-github2';
 import { config } from 'dotenv';
 
 import { Injectable } from '@nestjs/common';
@@ -20,7 +20,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     accessToken: string,
     refreshToken: string,
     profile: any,
-    done: VerifyCallback,
+    done: any,
   ): Promise<any> {
     const { name, avatar_url, login, id } = profile._json;
     const { emails } = profile;
