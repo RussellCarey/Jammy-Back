@@ -5,7 +5,7 @@ import { Module } from '@nestjs/common';
 
 // Entities
 import { Jam } from '../jams/jams.entity';
-import { User } from '../users/user.entity';
+import { User } from '../users/users.entity';
 import { Team } from '../teams/teams.entity';
 import { Project } from '../projects/projects.entity';
 import { FavouritedProjects } from '../favourited-projects/favourited-projects.entity';
