@@ -28,8 +28,15 @@ export class ProjetController {
   @Get('search')
   async searchForProjectByName(
     @Query('name') name?: string,
-  ): Promise<IResponse<Project>> {
-    const project = await this.projectServices.getProjectByName(name);
+    @Query('skip', OptionalIntPipe) skip?: number,
+    @Query('take', OptionalIntPipe) take?: number,
+    @Query('order', OrderByPipe) order?: Record<string, 'asc' | 'desc'>,
+  ): Promise<IResponse<Project[]>> {
+    const project = await this.projectServices.getProjectByName(name, {
+      skip,
+      take,
+      order,
+    });
     return { message: 'Retrieved projects', data: project };
   }
 
@@ -79,9 +86,12 @@ export class ProjetController {
   }
 
   @UseGuards(LoggedInGuard)
-  @Delete('delete')
-  async deleteUser(@Session() session: Record<string, any>) {
-    const deletedProject = await this.projectServices.delete(session.user.id);
-    return { status: HttpStatus.OK, data: deletedProject };
+  @Delete(':projectId')
+  async deleteUser(@Param('projectId', ParseIntPipe) projectId: number) {
+    const deletedProject = await this.projectServices.delete(projectId);
+    return {
+      data: deletedProject,
+      message: 'Deleted a project',
+    };
   }
 }

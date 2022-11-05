@@ -16,8 +16,20 @@ export class JamServices {
     return jam;
   }
 
-  async getJamByName(term: string): Promise<Jam> {
-    const jam = await this.jamRepository.findOne({
+  async getJamByName(
+    term: string,
+    params: {
+      order?: any;
+      skip?: number;
+      take?: number;
+      where?: any;
+    },
+  ): Promise<Jam[]> {
+    const { skip, take, order } = params;
+    const jam = await this.jamRepository.find({
+      skip,
+      take,
+      order,
       where: { jam_title: ILike(`%${term}%`), isAuthorized: true },
     });
     return jam;
@@ -73,7 +85,7 @@ export class JamServices {
   }
 
   async delete(id: number): Promise<Jam | undefined> {
-    const deletedProjet = await this.jamRepository.delete(id);
-    return deletedProjet.raw[0];
+    const deletedJam = await this.jamRepository.delete(id);
+    return deletedJam.raw[0];
   }
 }

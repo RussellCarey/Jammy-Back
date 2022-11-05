@@ -15,7 +15,9 @@ export class OrderByPipe implements PipeTransform {
 
     try {
       const queries = value.split(',').map((val) => val.trim());
+      console.log(queries);
       const orderBy: Record<string, 'asc' | 'desc'> = {};
+
       queries.forEach((query) => {
         // One query should be id:desc
         console.log(queries);

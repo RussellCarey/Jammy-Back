@@ -8,6 +8,7 @@ import {
   Query,
   Patch,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { LoggedInGuard } from 'src/common/guards/logged-in.guard';
 import { OrderByPipe } from 'src/pipes/orderby.pipe';
@@ -20,9 +21,28 @@ import { JamUpdateDTO } from './jams.update.dto';
 export class JamController {
   constructor(private readonly jamServices: JamServices) {}
 
+  @UseGuards(LoggedInGuard)
+  @Post('new')
+  async createJam(@Body() body: JamDTO) {
+    const createdJam = await this.jamServices.create(body);
+    return {
+      message: `Created a new jam`,
+      data: createdJam,
+    };
+  }
+
   @Get('search')
-  async searchForJamByName(@Query('name') name?: string): Promise<any> {
-    const jam = await this.jamServices.getJamByName(name);
+  async searchForJamByName(
+    @Query('name') name?: string,
+    @Query('skip', OptionalIntPipe) skip?: number,
+    @Query('take', OptionalIntPipe) take?: number,
+    @Query('order', OrderByPipe) order?: Record<string, 'asc' | 'desc'>,
+  ): Promise<any> {
+    const jam = await this.jamServices.getJamByName(name, {
+      skip,
+      take,
+      order,
+    });
     return { message: 'Retrieved jams', data: jam };
   }
 
@@ -38,22 +58,12 @@ export class JamController {
     @Query('take', OptionalIntPipe) take?: number,
     @Query('order', OrderByPipe) order?: Record<string, 'asc' | 'desc'>,
   ): Promise<any> {
-    const products = await this.jamServices.getAllJams({
+    const jams = await this.jamServices.getAllJams({
       skip,
       take,
       order,
     });
-    return { message: 'Retrieved jams', data: products };
-  }
-
-  @UseGuards(LoggedInGuard)
-  @Post()
-  async createJam(@Body() body: JamDTO) {
-    const createdJam = await this.jamServices.create(body);
-    return {
-      message: `Created a new jam`,
-      data: createdJam,
-    };
+    return { message: 'Retrieved jams', data: jams };
   }
 
   @UseGuards(LoggedInGuard)
@@ -64,5 +74,15 @@ export class JamController {
   ) {
     const updatedJam = await this.jamServices.update(jamId, body);
     return { message: `Updated a jam`, data: updatedJam, status: true };
+  }
+
+  @UseGuards(LoggedInGuard)
+  @Delete(':jamId')
+  async deleteUser(@Param('jamId', ParseIntPipe) jamId: number) {
+    const deletedJam = await this.jamServices.delete(jamId);
+    return {
+      data: deletedJam,
+      message: 'Deleted a jam',
+    };
   }
 }

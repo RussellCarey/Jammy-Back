@@ -8,7 +8,7 @@ import {
   CreateDateColumn,
   ManyToMany,
 } from 'typeorm';
-import { IsDate } from 'class-validator';
+import { IsDate, IsDateString } from 'class-validator';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
 
@@ -23,22 +23,22 @@ export class Jam extends BaseEntity {
   @Column({ type: 'varchar', length: 300 })
   jam_description: string;
 
-  @Column({ type: 'varchar', length: 300 })
+  @Column({ type: 'varchar', length: 300, default: ' ' })
   jam_image: string;
 
-  @Column({})
+  @Column({ type: 'varchar', length: 300 })
   jam_brief: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  @IsDate()
+  @IsDateString()
   launch_date: Date;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  @IsDate()
+  @IsDateString()
   start_date: Date;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  @IsDate()
+  @IsDateString()
   end_date: Date;
 
   @Column({ default: false })
