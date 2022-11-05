@@ -6,6 +6,7 @@ import { HttpErrorFilter } from './common/exceptions/http-catch.exception';
 import * as Session from 'express-session';
 import * as passort from 'passport';
 import helmet from 'helmet';
+import { ValidationFilter } from './common/exceptions/validation.exception';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -13,6 +14,7 @@ async function bootstrap() {
   app.enableCors();
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new HttpErrorFilter());
+  app.useGlobalFilters(new ValidationFilter());
   app.useGlobalPipes(new ValidationPipe());
 
   app.use(

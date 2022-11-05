@@ -16,6 +16,7 @@ import {
 import { LoggedInGuard } from 'src/common/guards/logged-in.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from '../users/users.services';
+import { LocalAuthGuard } from 'src/common/guards/local.auth.guard';
 
 @Controller('auth')
 export class GithubController {
@@ -24,6 +25,7 @@ export class GithubController {
     private readonly userService: UsersService,
   ) {}
 
+  @UseGuards(LocalAuthGuard)
   @Get('login')
   @UseGuards(AuthGuard('github'))
   async githubAuth(@Req() req) {

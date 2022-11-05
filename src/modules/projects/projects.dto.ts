@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { BaseEntityDTO } from 'src/common/dtos/base.dto';
 
 class ProjectDTO extends BaseEntityDTO {
@@ -10,45 +10,41 @@ class ProjectDTO extends BaseEntityDTO {
   @IsString()
   project_description: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   youtube_url: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   github_url: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   live_site_url: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   header_image: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   background_image: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   text_color: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   link_color: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   Background_color: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   container_color: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  views: number;
 }
 
 export { ProjectDTO };

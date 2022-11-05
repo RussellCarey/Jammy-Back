@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { skip } from 'rxjs';
 import { Repository, ILike } from 'typeorm';
 import { ProjectDTO } from './projects.dto';
 import { Project } from './projects.entity';
@@ -16,8 +17,19 @@ export class ProjectServices {
     return project;
   }
 
-  async getProjectByName(term: string): Promise<Project> {
-    const project = await this.projectRepository.findOne({
+  async getProjectByName(
+    term: string,
+    params: {
+      order?: any;
+      skip?: number;
+      take?: number;
+    },
+  ): Promise<Project[]> {
+    const { skip, take, order } = params;
+    const project = await this.projectRepository.find({
+      skip,
+      take,
+      order,
       where: { project_title: ILike(`%${term}%`) },
     });
     return project;

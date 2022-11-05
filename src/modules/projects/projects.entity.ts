@@ -16,19 +16,19 @@ export class Project extends BaseEntity {
   @Column({ type: 'varchar', length: 100 })
   project_title: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   project_title_slug: string;
 
   @Column({ type: 'varchar', length: 300 })
   project_description: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   youtube_url: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   github_url: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   live_site_url: string;
 
   @Column({ type: 'varchar', length: 100, default: '' })

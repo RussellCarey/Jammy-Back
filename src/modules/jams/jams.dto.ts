@@ -1,4 +1,10 @@
-import { IsNumber, IsString, IsNotEmpty, IsBoolean } from 'class-validator';
+import {
+  IsNumber,
+  IsString,
+  IsNotEmpty,
+  IsBoolean,
+  IsOptional,
+} from 'class-validator';
 import { BaseEntityDTO } from 'src/common/dtos/base.dto';
 
 class JamDTO extends BaseEntityDTO {
@@ -6,11 +12,13 @@ class JamDTO extends BaseEntityDTO {
   @IsString()
   jam_title: string;
 
+  @IsString()
+  jam_title_slug: string;
+
   @IsNotEmpty()
   @IsString()
   jam_description: string;
 
-  @IsNotEmpty()
   @IsString()
   jam_image: string;
 
@@ -19,18 +27,18 @@ class JamDTO extends BaseEntityDTO {
   jam_brief: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  launch_date: number;
+  @IsString()
+  launch_date: Date;
 
   @IsNotEmpty()
-  @IsNumber()
-  start_date: number;
+  @IsString()
+  start_date: Date;
 
   @IsNotEmpty()
-  @IsNumber()
-  end_date: number;
+  @IsString()
+  end_date: Date;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsBoolean()
   isAuthorized: boolean;
 }
