@@ -1,5 +1,5 @@
 import { PassportSerializer } from '@nestjs/passport';
-import { User } from 'src/modules/users/user.entity';
+import { User } from 'src/modules/users/users.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 

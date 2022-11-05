@@ -8,7 +8,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { User } from '../users/user.entity';
+import { User } from '../users/users.entity';
 import { Jam } from '../jams/jams.entity';
 import { Project } from '../projects/projects.entity';
 

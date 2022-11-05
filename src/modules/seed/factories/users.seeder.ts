@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Promise as Bluebird } from 'bluebird';
-import { User } from 'src/modules/users/user.entity';
+import { User } from 'src/modules/users/users.entity';
 import { faker } from '@faker-js/faker';
 import { SeederInterface } from '../seeder.interface';
 
