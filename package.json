@@ -19,7 +19,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed": "nest start --entryFile seed"
+    "seed": "nest start --entryFile seed",
+    "docker:build": "docker build -t jammy-back ."
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
