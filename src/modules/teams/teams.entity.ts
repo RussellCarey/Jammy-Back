@@ -6,6 +6,7 @@ import {
   OneToOne,
   JoinColumn,
   ManyToMany,
+  ManyToOne,
 } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { User } from '../users/users.entity';
@@ -23,11 +24,15 @@ export class Team extends BaseEntity {
   @Column({ type: 'varchar', length: 300 })
   team_image: string;
 
-  @Column({ type: 'int', nullable: true })
-  projectId: number;
+  @Column({ nullable: true })
+  jam_id: number;
+
+  @Column({ nullable: true })
+  project_id: number;
 
   // Relations
-  @ManyToMany(() => Jam, (jam) => jam.teams)
+  @ManyToOne(() => Jam, (jam) => jam.teams)
+  @JoinColumn()
   jam: Jam;
 
   @ManyToMany(() => User, (user) => user.teams)
@@ -35,6 +40,6 @@ export class Team extends BaseEntity {
   users: User[];
 
   @OneToOne(() => Project, (project) => project.team)
-  @JoinColumn({ name: 'projectId' })
+  @JoinColumn()
   project: Project;
 }

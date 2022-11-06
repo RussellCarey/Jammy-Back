@@ -17,7 +17,7 @@ export class FavouritedProjectServices {
   }): Promise<FavouritedProjects> {
     const favouritedProject = await this.fpRepoitory.findOne({
       // Array is like OR.
-      where: [{ userId: params.userid }, { projectId: params.projectid }],
+      where: [{ user_id: params.userid }, { project_id: params.projectid }],
     });
     return favouritedProject;
   }

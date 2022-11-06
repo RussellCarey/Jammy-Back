@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+
 import { InjectRepository } from '@nestjs/typeorm';
 import { Team } from './teams.entity';
 import { Repository, ILike } from 'typeorm';
@@ -12,15 +13,22 @@ export class TeamServices {
   ) {}
 
   async getTeamById(id: number): Promise<Team> {
-    const project = await this.teamRepository.findOneBy({ id: id });
-    return project;
+    const team = await this.teamRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: {
+        jam: true,
+      },
+    });
+    return team;
   }
 
   async getTeamByName(term: string): Promise<Team> {
-    const project = await this.teamRepository.findOne({
+    const team = await this.teamRepository.findOne({
       where: { team_name: ILike(`%${term}%`) },
     });
-    return project;
+    return team;
   }
 
   async getAllTeams(params: {
@@ -30,16 +38,17 @@ export class TeamServices {
     where?: any;
   }): Promise<Team[]> {
     const { skip, take, order, where } = params;
-    const projects = await this.teamRepository.find({
+    const teams = await this.teamRepository.find({
       skip,
       take,
       order,
       where,
     });
-    return projects;
+    return teams;
   }
 
   async create(teamData: TeamDTO): Promise<Team> {
+    console.log(teamData);
     const team = await this.teamRepository.save(teamData);
     return team;
   }

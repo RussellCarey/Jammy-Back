@@ -14,19 +14,17 @@ export class TeamSeeder implements SeederInterface {
   ) {}
 
   async seed() {
-    const numberOfItemsToAdd = 10;
-    const data: Partial<Team>[] = [];
+    const numberOfItemsToAdd = 20;
+    const data: Partial<any>[] = [];
 
     for (let i = 0; i < numberOfItemsToAdd; i++) {
       const teamName = faker.random.words(3);
       data.push({
-        // Insert object of data for each item..
         team_name: teamName,
         // team_name_slug: teamName.replace(' ', '-'),
         team_description: faker.random.words(10),
         team_image:
           'https://www.youtube.com/watch?v=Yhu6jwhJQjk&t=1866s&ab_channel=XTechnology',
-        users: [],
       });
     }
 

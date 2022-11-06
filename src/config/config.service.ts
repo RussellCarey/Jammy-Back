@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 require('dotenv').config();
 
 class ConfigService {
   constructor(private env: { [k: string]: string | undefined }) {}
 
-  private getValue(key: string, throwOnMissing = true): string {
+  public getValue(key: string, throwOnMissing = true): string {
     const value = this.env[key];
     if (!value && throwOnMissing) {
       throw new Error(`config error - missing env.${key}`);
@@ -31,7 +32,9 @@ class ConfigService {
   public getTypeOrmConfig(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
-      host: this.getValue('PROD_DB_HOST'),
+      host: this.isProduction()
+        ? this.getValue('PROD_DB_HOST')
+        : this.getValue('DEV_DB_HOST'),
       port: parseInt(this.getValue('PROD_DB_PORT')),
       username: this.getValue('PROD_DB_USERNAME'),
       password: this.getValue('PROD_DB_PW'),
@@ -41,6 +44,7 @@ class ConfigService {
       entities: ['dist/modules/**/entities/*.entity.{ts,js}'],
       synchronize: true,
       autoLoadEntities: true,
+      namingStrategy: new SnakeNamingStrategy(),
 
       //   cli: {
       //     migrationsDir: 'src/migrations',

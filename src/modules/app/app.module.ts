@@ -10,6 +10,7 @@ import { ProjectModule } from '../projects/projects.module';
 import { PassportModule } from '@nestjs/passport';
 import { FavouritedProjectsModule } from '../favourited-projects/favourited-projects.module';
 import { SeedModule } from '../seed/seeder.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { SeedModule } from '../seed/seeder.module';
       limit: 30,
     }),
     PassportModule.register({ session: true }),
+    ScheduleModule.forRoot(),
   ],
   controllers: [],
   providers: [],

@@ -45,6 +45,10 @@ class ProjectDTO extends BaseEntityDTO {
   @IsOptional()
   @IsString()
   container_color: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  team_id: number;
 }
 
 export { ProjectDTO };

@@ -7,8 +7,9 @@ import {
   BeforeUpdate,
   CreateDateColumn,
   ManyToMany,
+  ManyToOne,
 } from 'typeorm';
-import { IsDate, IsDateString } from 'class-validator';
+import { IsDate } from 'class-validator';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
 
@@ -23,29 +24,29 @@ export class Jam extends BaseEntity {
   @Column({ type: 'varchar', length: 300 })
   jam_description: string;
 
-  @Column({ type: 'varchar', length: 300, default: ' ' })
+  @Column({ type: 'varchar', length: 300 })
   jam_image: string;
 
-  @Column({ type: 'varchar', length: 300 })
+  @Column({})
   jam_brief: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  @IsDateString()
+  @IsDate()
   launch_date: Date;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  @IsDateString()
+  @IsDate()
   start_date: Date;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  @IsDateString()
+  @IsDate()
   end_date: Date;
 
   @Column({ default: false })
   isAuthorized: boolean;
 
   // Relations
-  @ManyToMany(() => Team, (team) => team.users)
+  @OneToMany(() => Team, (team) => team.users)
   teams: Team[];
 
   @BeforeInsert()

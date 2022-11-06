@@ -7,16 +7,16 @@ import { Project } from '../projects/projects.entity';
 @Entity({ name: 'favourited_projects' })
 export class FavouritedProjects extends BaseEntity {
   @Column()
-  userId!: number;
+  user_id!: number;
 
   @Column()
-  projectId!: number;
+  project_id!: number;
 
   @ManyToOne(() => User, (user) => user.favourite_projects)
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn()
   user: User;
 
   @ManyToOne(() => Project, (project) => project.favourited_by)
-  @JoinColumn({ name: 'projectId' })
+  @JoinColumn()
   project: Project;
 }

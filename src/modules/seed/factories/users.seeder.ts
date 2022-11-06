@@ -14,7 +14,7 @@ export class UsersSeeder implements SeederInterface {
   ) {}
 
   async seed() {
-    const numberOfItemsToAdd = 10;
+    const numberOfItemsToAdd = 20;
     const data: Partial<User>[] = [];
 
     for (let i = 0; i < numberOfItemsToAdd; i++) {

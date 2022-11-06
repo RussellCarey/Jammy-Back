@@ -57,7 +57,6 @@ export class User extends BaseEntity {
 
   // Relations
   @ManyToMany(() => Team, (team) => team.users)
-  @JoinTable()
   teams: Team[];
 
   @OneToMany(() => FavouritedProjects, (fav_projects) => fav_projects.user)

@@ -9,7 +9,7 @@ import {
 import { IsDate, IsString } from 'class-validator';
 
 export abstract class BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column({ type: 'boolean', default: true })

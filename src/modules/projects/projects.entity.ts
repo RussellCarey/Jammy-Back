@@ -6,6 +6,7 @@ import {
   BeforeInsert,
   BeforeUpdate,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
@@ -52,7 +53,11 @@ export class Project extends BaseEntity {
   @Column({ type: 'int', default: 0 })
   views: number;
 
+  @Column({ nullable: false })
+  team_id: number;
+
   @OneToOne(() => Team, (team) => team.project)
+  @JoinColumn()
   team: Team;
 
   @OneToMany(() => FavouritedProjects, (fav_projects) => fav_projects.project)

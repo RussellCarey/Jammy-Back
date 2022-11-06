@@ -14,7 +14,7 @@ export class ProjectsSeeder implements SeederInterface {
   ) {}
 
   async seed() {
-    const numberOfItemsToAdd = 10;
+    const numberOfItemsToAdd = 20;
     const data: Partial<Project>[] = [];
 
     for (let i = 0; i < numberOfItemsToAdd; i++) {

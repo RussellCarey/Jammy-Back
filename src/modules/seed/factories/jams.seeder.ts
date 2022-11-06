@@ -14,7 +14,7 @@ export class JamsSeeder implements SeederInterface {
   ) {}
 
   async seed() {
-    const numberOfItemsToAdd = 10;
+    const numberOfItemsToAdd = 20;
 
     const data: Partial<Jam>[] = [];
 

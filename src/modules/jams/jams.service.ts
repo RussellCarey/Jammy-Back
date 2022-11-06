@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
+import { CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Jam } from './jams.entity';
 import { Repository, ILike } from 'typeorm';
@@ -7,7 +9,10 @@ import { JamUpdateDTO } from './jams.update.dto';
 
 @Injectable()
 export class JamServices {
-  constructor(@InjectRepository(Jam) private jamRepository: Repository<Jam>) {}
+  private readonly logger: Logger;
+  constructor(@InjectRepository(Jam) private jamRepository: Repository<Jam>) {
+    this.logger = new Logger();
+  }
 
   async getJamById(id: number): Promise<Jam> {
     const jam = await this.jamRepository.findOne({
@@ -87,5 +92,11 @@ export class JamServices {
   async delete(id: number): Promise<Jam | undefined> {
     const deletedJam = await this.jamRepository.delete(id);
     return deletedJam.raw[0];
+  }
+
+  // CRON functionality
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  checkForReleasedJams() {
+    this.logger.log('Its midnight');
   }
 }

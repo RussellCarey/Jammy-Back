@@ -14,18 +14,18 @@ export class FavouritedProjectsSeeder implements SeederInterface {
   ) {}
 
   async seed() {
-    const numberOfItemsToAdd = 10;
+    const numberOfItemsToAdd = 20;
     const data: Partial<FavouritedProjects>[] = [];
 
     for (let i = 0; i < numberOfItemsToAdd; i++) {
       data.push({
-        userId: faker.datatype.number({
+        user_id: faker.datatype.number({
           min: 1,
-          max: 9,
+          max: 19,
         }),
-        projectId: faker.datatype.number({
+        project_id: faker.datatype.number({
           min: 1,
-          max: 9,
+          max: 19,
         }),
       });
     }

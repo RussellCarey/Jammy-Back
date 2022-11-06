@@ -4,11 +4,11 @@ import { BaseEntityDTO } from 'src/common/dtos/base.dto';
 class FavouritedProjectDTO extends BaseEntityDTO {
   @IsNotEmpty()
   @IsNumber()
-  userId: number;
+  user_id: number;
 
   @IsNotEmpty()
   @IsNumber()
-  projectId: number;
+  project_id: number;
 }
 
 export { FavouritedProjectDTO };

@@ -23,13 +23,7 @@ export class SeedService {
     private readonly fpSeeder: FavouritedProjectsSeeder,
     private readonly teamSeeder: TeamSeeder,
   ) {
-    this.seeders = [
-      this.jamSeeder,
-      this.userSeeder,
-      this.projectSeeder,
-      this.fpSeeder,
-      this.teamSeeder,
-    ];
+    this.seeders = [this.jamSeeder, this.userSeeder];
   }
 
   async seed() {
