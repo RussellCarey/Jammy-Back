@@ -19,15 +19,15 @@ import { AdminGuard } from 'src/common/guards/admin.guard';
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  @UseGuards(AdminGuard)
-  @Get('all')
+  // @UseGuards(AdminGuard)
+  @Get()
   async getProfile(@Request() req) {
     const users = await this.userService.find();
     return users;
   }
 
   @UseGuards(LoggedInGuard)
-  @Patch('update')
+  @Patch()
   async updateUser(
     @Session() session: Record<string, any>,
     @Body() body: UserUpdateDTO,
@@ -37,7 +37,7 @@ export class UsersController {
   }
 
   @UseGuards(LoggedInGuard)
-  @Delete('delete')
+  @Delete()
   async deleteUser(@Session() session: Record<string, any>) {
     const deletedUser = await this.userService.delete(session.user.id);
     return { status: HttpStatus.OK, data: deletedUser };

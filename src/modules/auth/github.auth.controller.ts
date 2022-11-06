@@ -8,9 +8,6 @@ import {
   Request,
   UnauthorizedException,
   Res,
-  Patch,
-  Delete,
-  Body,
 } from '@nestjs/common';
 // import { GithubService } from './github.service';
 import { LoggedInGuard } from 'src/common/guards/logged-in.guard';
@@ -72,6 +69,7 @@ export class GithubController {
       // image
     };
 
+    console.log('Saving new uesr');
     session.save();
 
     // Redirect to homepage (when made)

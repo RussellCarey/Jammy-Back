@@ -6,11 +6,11 @@ import { Project } from '../projects/projects.entity';
 
 @Entity({ name: 'favourited_projects' })
 export class FavouritedProjects extends BaseEntity {
-  @Column()
-  user_id!: number;
+  @Column({ type: 'int' })
+  user_id: number;
 
-  @Column()
-  project_id!: number;
+  @Column({ type: 'int' })
+  project_id: number;
 
   @ManyToOne(() => User, (user) => user.favourite_projects)
   @JoinColumn()

@@ -32,7 +32,11 @@ class JamUpdateDTO extends BaseEntityDTO {
 
   @IsOptional()
   @IsBoolean()
-  isAuthorized: boolean;
+  is_authorized: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  has_started: boolean;
 }
 
 export { JamUpdateDTO };

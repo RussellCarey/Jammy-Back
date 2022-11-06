@@ -39,7 +39,7 @@ export class JamsSeeder implements SeederInterface {
           '2023-07-01T00:00:00.000Z',
           '2023-08-01T00:00:00.000Z',
         ),
-        isAuthorized: faker.datatype.boolean(),
+        is_authorized: faker.datatype.boolean(),
       });
     }
 

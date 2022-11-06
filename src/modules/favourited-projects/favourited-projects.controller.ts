@@ -1,25 +1,24 @@
 import {
   Controller,
   Get,
-  Post,
   Param,
-  Body,
-  ParseIntPipe,
+  Post,
   Query,
-  Patch,
+  Session,
   UseGuards,
 } from '@nestjs/common';
 import { LoggedInGuard } from 'src/common/guards/logged-in.guard';
 import { OrderByPipe } from 'src/pipes/orderby.pipe';
 import { OptionalIntPipe } from 'src/pipes/optionalInt.pipe';
 import { FavouritedProjectServices } from './favourited-projects.service';
-import { FavouritedProjectDTO } from './favourited-projects.dto';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @Controller('favourited_projects')
 export class FavouritedProjectController {
   constructor(private readonly fpServices: FavouritedProjectServices) {}
 
-  @Get('')
+  @UseGuards(AdminGuard)
+  @Get()
   async getAll(
     @Query('skip', OptionalIntPipe) skip?: number,
     @Query('take', OptionalIntPipe) take?: number,
@@ -33,7 +32,25 @@ export class FavouritedProjectController {
     return { message: 'Retrieved favourited projects', data: fp };
   }
 
-  @Get('/find')
+  @Get('user')
+  async getUsers(
+    @Session() session: Record<string, any>,
+    @Query('skip', OptionalIntPipe) skip?: number,
+    @Query('take', OptionalIntPipe) take?: number,
+    @Query('order', OrderByPipe) order?: Record<string, 'asc' | 'desc'>,
+  ): Promise<any> {
+    const fp = await this.fpServices.getAllFromUser(
+      {
+        skip,
+        take,
+        order,
+      },
+      session,
+    );
+    return { message: 'Retrieved your favourited projects', data: fp };
+  }
+
+  @Get('find')
   async getOne(
     @Query('userid', OptionalIntPipe) userid?: number,
     @Query('projectid', OptionalIntPipe) projectid?: number,
@@ -46,9 +63,25 @@ export class FavouritedProjectController {
   }
 
   @UseGuards(LoggedInGuard)
-  @Post()
-  async create(@Body() body: FavouritedProjectDTO) {
-    const createdFP = await this.fpServices.create(body);
+  @Post(':projectid')
+  async create(
+    @Session() session: Record<string, any>,
+    @Param('projectid', OptionalIntPipe) projectid?: number,
+  ) {
+    // Check for existing favourite
+    const exisiting = await this.fpServices.getOne({
+      projectid,
+      userid: session.user.id,
+    });
+
+    if (exisiting) {
+      return {
+        message: `Already favourited`,
+        data: null,
+      };
+    }
+
+    const createdFP = await this.fpServices.create(projectid, session);
     return {
       message: `Created a relation for projects and favourites`,
       data: createdFP,

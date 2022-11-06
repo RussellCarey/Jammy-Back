@@ -16,7 +16,7 @@ export class JamServices {
 
   async getJamById(id: number): Promise<Jam> {
     const jam = await this.jamRepository.findOne({
-      where: { id: id, isAuthorized: true },
+      where: { id: id, is_authorized: true },
     });
     return jam;
   }
@@ -35,11 +35,12 @@ export class JamServices {
       skip,
       take,
       order,
-      where: { jam_title: ILike(`%${term}%`), isAuthorized: true },
+      where: { jam_title: ILike(`%${term}%`), is_authorized: true },
     });
     return jam;
   }
 
+  //TODO: Check how to limit max take to stop api abused.
   async getAllJams(params: {
     order?: any;
     skip?: number;
@@ -66,7 +67,7 @@ export class JamServices {
       skip,
       take,
       order,
-      where: { isAuthorized: false },
+      where: { is_authorized: false },
     });
     return jams;
   }
@@ -95,8 +96,14 @@ export class JamServices {
   }
 
   // CRON functionality
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  checkForReleasedJams() {
-    this.logger.log('Its midnight');
+  @Cron(CronExpression.EVERY_DAY_AT_2AM)
+  async checkForReleasedJams() {
+    this.logger.log('Updated todays jams to has started');
+    await this.jamRepository
+      .createQueryBuilder()
+      .update(Jam)
+      .set({ has_started: true })
+      .where('start_date < now() AND has_started = false')
+      .execute();
   }
 }

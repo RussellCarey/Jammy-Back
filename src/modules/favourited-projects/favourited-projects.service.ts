@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FavouritedProjects } from './favourited-projects.entity';
 import { Repository } from 'typeorm';
 import { FavouritedProjectDTO } from './favourited-projects.dto';
+import { Session } from 'inspector';
+import { session } from 'passport';
 
 @Injectable()
 export class FavouritedProjectServices {
@@ -37,8 +39,30 @@ export class FavouritedProjectServices {
     return relations;
   }
 
-  async create(data: FavouritedProjectDTO): Promise<FavouritedProjects> {
-    const favouritedProject = await this.fpRepoitory.save(data);
+  async getAllFromUser(
+    params: {
+      order?: any;
+      skip?: number;
+      take?: number;
+    },
+    session: any,
+  ): Promise<FavouritedProjects[]> {
+    const { skip, take, order } = params;
+    const relations = await this.fpRepoitory.find({
+      skip,
+      take,
+      order,
+      where: { user_id: session.user.id },
+    });
+
+    return relations;
+  }
+
+  async create(id, session): Promise<FavouritedProjects> {
+    const favouritedProject = await this.fpRepoitory.save({
+      user_id: session.user.id,
+      project_id: id,
+    });
     return favouritedProject;
   }
 

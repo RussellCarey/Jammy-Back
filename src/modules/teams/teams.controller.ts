@@ -8,6 +8,7 @@ import {
   Query,
   Patch,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { LoggedInGuard } from 'src/common/guards/logged-in.guard';
 import { OrderByPipe } from 'src/pipes/orderby.pipe';
@@ -70,5 +71,15 @@ export class TeamsController {
   ): Promise<IResponse<Team>> {
     const updatedTeam = await this.teamServices.update(teamId, body);
     return { message: `Updated a team`, data: updatedTeam };
+  }
+
+  @UseGuards(LoggedInGuard)
+  @Delete(':teamId')
+  async deleteUser(@Param('teamId', ParseIntPipe) teamId: number) {
+    const deletedJam = await this.teamServices.delete(teamId);
+    return {
+      data: deletedJam,
+      message: 'Deleted a jam',
+    };
   }
 }

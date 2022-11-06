@@ -43,7 +43,10 @@ export class Jam extends BaseEntity {
   end_date: Date;
 
   @Column({ default: false })
-  isAuthorized: boolean;
+  is_authorized: boolean;
+
+  @Column({ default: false })
+  has_started: boolean;
 
   // Relations
   @OneToMany(() => Team, (team) => team.users)

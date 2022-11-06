@@ -16,20 +16,11 @@ import { OptionalIntPipe } from 'src/pipes/optionalInt.pipe';
 import { JamServices } from './jams.service';
 import { JamDTO } from './jams.dto';
 import { JamUpdateDTO } from './jams.update.dto';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @Controller('jams')
 export class JamController {
   constructor(private readonly jamServices: JamServices) {}
-
-  @UseGuards(LoggedInGuard)
-  @Post('new')
-  async createJam(@Body() body: JamDTO) {
-    const createdJam = await this.jamServices.create(body);
-    return {
-      message: `Created a new jam`,
-      data: createdJam,
-    };
-  }
 
   @Get('search')
   async searchForJamByName(
@@ -67,6 +58,19 @@ export class JamController {
   }
 
   @UseGuards(LoggedInGuard)
+  @Post('new')
+  async createJam(@Body() body: JamDTO) {
+    const createdJam = await this.jamServices.create(body);
+    return {
+      message: `Created a new jam`,
+      data: createdJam,
+    };
+  }
+
+  // TODO: Check use can edit this resource as they can edit its states.
+  // TODO: Ideally we dont want is_active / has_started to be editable.
+  // Only controlled by time and an admin..
+  @UseGuards(LoggedInGuard)
   @Patch(':jamId')
   async updateJam(
     @Body() body: JamUpdateDTO,
@@ -76,6 +80,7 @@ export class JamController {
     return { message: `Updated a jam`, data: updatedJam, status: true };
   }
 
+  // TODO: Check use can edit this resource
   @UseGuards(LoggedInGuard)
   @Delete(':jamId')
   async deleteUser(@Param('jamId', ParseIntPipe) jamId: number) {
