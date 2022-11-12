@@ -16,7 +16,6 @@ import { OptionalIntPipe } from 'src/pipes/optionalInt.pipe';
 import { JamServices } from './jams.service';
 import { JamDTO } from './jams.dto';
 import { JamUpdateDTO } from './jams.update.dto';
-import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @Controller('jams')
 export class JamController {

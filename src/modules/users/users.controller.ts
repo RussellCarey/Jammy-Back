@@ -39,6 +39,7 @@ export class UsersController {
   @UseGuards(LoggedInGuard)
   @Delete()
   async deleteUser(@Session() session: Record<string, any>) {
+    // TODO: Block account and delete later..
     const deletedUser = await this.userService.delete(session.user.id);
     return { status: HttpStatus.OK, data: deletedUser };
   }

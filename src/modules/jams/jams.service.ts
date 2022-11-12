@@ -98,7 +98,8 @@ export class JamServices {
   // CRON functionality
   @Cron(CronExpression.EVERY_DAY_AT_2AM)
   async checkForReleasedJams() {
-    this.logger.log('Updated todays jams to has started');
+    this.logger.log('Checking if Jams are due to be updated to launched.');
+
     await this.jamRepository
       .createQueryBuilder()
       .update(Jam)

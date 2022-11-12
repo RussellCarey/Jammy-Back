@@ -8,9 +8,11 @@ import { UserModule } from '../users/users.module';
 import { AuthModule } from 'src/modules/auth/auth.module';
 import { ProjectModule } from '../projects/projects.module';
 import { PassportModule } from '@nestjs/passport';
-import { FavouritedProjectsModule } from '../favourited-projects/favourited-projects.module';
 import { SeedModule } from '../seed/seeder.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { FavouriteModule } from '../favourite/favourite.module';
+import { CommentModule } from '../comments/comments.module';
+import { AchievementModule } from '../achievements/achievements.module';
 
 @Module({
   imports: [
@@ -21,11 +23,15 @@ import { ScheduleModule } from '@nestjs/schedule';
     TeamModule,
     AuthModule,
     ProjectModule,
-    FavouritedProjectsModule,
+    FavouriteModule,
+    CommentModule,
+    AchievementModule,
+
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: 30,
     }),
+
     PassportModule.register({ session: true }),
     ScheduleModule.forRoot(),
   ],

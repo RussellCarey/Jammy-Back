@@ -12,6 +12,7 @@ import {
 import { IsDate } from 'class-validator';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
+import { Comment } from '../comments/comments.entity';
 
 @Entity({ name: 'jams' })
 export class Jam extends BaseEntity {
@@ -51,6 +52,9 @@ export class Jam extends BaseEntity {
   // Relations
   @OneToMany(() => Team, (team) => team.users)
   teams: Team[];
+
+  @OneToMany(() => Comment, (comment) => comment.jam)
+  comments: Comment[];
 
   @BeforeInsert()
   @BeforeUpdate()

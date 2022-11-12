@@ -7,7 +7,6 @@ import { SeederInterface } from './seeder.interface';
 import { JamsSeeder } from './factories/jams.seeder';
 import { ProjectsSeeder } from './factories/projects.seeder';
 import { UsersSeeder } from './factories/users.seeder';
-import { FavouritedProjectsSeeder } from './factories/favourited-projects.seeder';
 import { TeamSeeder } from './factories/teams.seeder';
 
 @Injectable()
@@ -20,7 +19,6 @@ export class SeedService {
     private readonly jamSeeder: JamsSeeder,
     private readonly userSeeder: UsersSeeder,
     private readonly projectSeeder: ProjectsSeeder,
-    private readonly fpSeeder: FavouritedProjectsSeeder,
     private readonly teamSeeder: TeamSeeder,
   ) {
     this.seeders = [this.jamSeeder, this.userSeeder];

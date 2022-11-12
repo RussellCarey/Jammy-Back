@@ -1,16 +1,10 @@
 // item.entity.ts
-import {
-  Entity,
-  Column,
-  OneToMany,
-  Index,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Entity, Column, OneToMany, Index, ManyToMany } from 'typeorm';
 import { IsInt, Length, IsEmail, IsFQDN, IsString } from 'class-validator';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
-import { FavouritedProjects } from '../favourited-projects/favourited-projects.entity';
+import { Comment } from '../comments/comments.entity';
+import { Favourite } from '../favourite/favourite.entity';
 
 //TODO - Set up another module for the join table?
 @Entity({ name: 'users' })
@@ -59,6 +53,9 @@ export class User extends BaseEntity {
   @ManyToMany(() => Team, (team) => team.users)
   teams: Team[];
 
-  @OneToMany(() => FavouritedProjects, (fav_projects) => fav_projects.user)
-  favourite_projects: FavouritedProjects[];
+  @OneToMany(() => Favourite, (fav_projects) => fav_projects.user)
+  favourites: Favourite[];
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
 }

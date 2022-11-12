@@ -56,7 +56,8 @@ export class GithubController {
       existingUser = await this.userService.save({ ...req.user });
 
     // Get details from new / current user.
-    const { id, github_id, email, name, github_username } = existingUser;
+    const { id, github_id, email, name, github_username, isAdmin } =
+      existingUser;
 
     // Add to the session data,
     session.user = {
@@ -66,6 +67,7 @@ export class GithubController {
       name,
       github_username,
       accessToken: req.user.accessToken,
+      isAdmin,
       // image
     };
 

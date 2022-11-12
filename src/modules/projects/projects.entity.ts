@@ -10,7 +10,8 @@ import {
 } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
-import { FavouritedProjects } from '../favourited-projects/favourited-projects.entity';
+import { Favourite } from '../favourite/favourite.entity';
+import { Comment } from '../comments/comments.entity';
 
 @Entity({ name: 'projects' })
 export class Project extends BaseEntity {
@@ -60,8 +61,11 @@ export class Project extends BaseEntity {
   @JoinColumn()
   team: Team;
 
-  @OneToMany(() => FavouritedProjects, (fav_projects) => fav_projects.project)
-  favourited_by: FavouritedProjects[];
+  @OneToMany(() => Favourite, (fav_projects) => fav_projects.project)
+  favourited_by: Favourite[];
+
+  @OneToMany(() => Comment, (comment) => comment.project)
+  comments: Comment[];
 
   @BeforeInsert()
   @BeforeUpdate()
