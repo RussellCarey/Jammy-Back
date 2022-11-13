@@ -1,4 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Favourite } from './favourite.entity';
@@ -6,7 +12,6 @@ import { Repository } from 'typeorm';
 import { Project } from '../projects/projects.entity';
 import { Comment } from '../comments/comments.entity';
 import startTransaction from 'src/utils/queryTransactionCreator';
-import { query } from 'express';
 
 @Injectable()
 export class FavouriteServices {
@@ -120,6 +125,7 @@ export class FavouriteServices {
       const project = await this.projectRepository.findOne({
         where: { id: id },
       });
+
       project.favourites += 1;
 
       // Update and resolve transactions.
@@ -130,6 +136,7 @@ export class FavouriteServices {
       return favouritedProject;
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException(error);
     } finally {
       await queryRunner.release();
     }
@@ -160,6 +167,7 @@ export class FavouriteServices {
       return favouritedComment;
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException(error);
     } finally {
       await queryRunner.release();
     }
@@ -178,8 +186,51 @@ export class FavouriteServices {
   }
 
   // Delete a favourite
-  async delete(id: number): Promise<Favourite | undefined> {
-    const deletedFavouritedProject = await this.favouriteRepository.delete(id);
-    return deletedFavouritedProject.raw[0];
+  async delete(id: number, session: any): Promise<Favourite | undefined> {
+    const queryRunner = await startTransaction(this.dataSource);
+
+    try {
+      // Get comment we wish to delete
+      const favouriteToDelete = await this.favouriteRepository.findOne({
+        where: { id: id },
+      });
+
+      // If we cannot find the item to delete
+      if (!favouriteToDelete)
+        throw new NotFoundException('Cannot find comment with provided id');
+
+      // If this is not owned by the user session
+      if (favouriteToDelete.user_id !== session.user.id)
+        throw new UnauthorizedException('You do not own this resource');
+
+      // Check which to delete, comment or project like (mins 1 from their count)
+
+      if (favouriteToDelete.project_id !== null) {
+        const projectToUpdate = await this.projectRepository.findOne({
+          where: { id: favouriteToDelete.project_id },
+        });
+        projectToUpdate.favourites -= 1;
+        await queryRunner.manager.save(projectToUpdate);
+      }
+
+      if (favouriteToDelete.comment_id !== null) {
+        const commentToUpdate = await this.projectRepository.findOne({
+          where: { id: favouriteToDelete.comment_id },
+        });
+        commentToUpdate.favourites -= 1;
+        await queryRunner.manager.save(commentToUpdate);
+      }
+
+      // Delete the favourite
+      await queryRunner.manager.remove(favouriteToDelete);
+      await queryRunner.commitTransaction();
+
+      return favouriteToDelete;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException(error);
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

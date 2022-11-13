@@ -6,6 +6,7 @@ import {
   Query,
   Session,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { LoggedInGuard } from 'src/common/guards/logged-in.guard';
 import { OrderByPipe } from 'src/pipes/orderby.pipe';
@@ -119,5 +120,15 @@ export class FavouriteController {
       message: `Created a relation for projects and favourites`,
       data: createdFP,
     };
+  }
+
+  @UseGuards(LoggedInGuard)
+  @Delete('/:commentid')
+  async deleteUser(
+    @Session() session: Record<string, any>,
+    @Param('commentid', OptionalIntPipe) commentid?: number,
+  ) {
+    const deletedFavourite = await this.fpServices.delete(commentid, session);
+    return { message: 'Deleted favourite', data: deletedFavourite };
   }
 }
