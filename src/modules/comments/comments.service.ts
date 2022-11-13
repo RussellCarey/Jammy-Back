@@ -10,6 +10,14 @@ export class CommentService {
     private commentRepository: Repository<Comment>,
   ) {}
 
+  async getOneComment(session: any, commentid: number): Promise<Comment> {
+    const favouritedProject = await this.commentRepository.findOne({
+      // Array is like OR.
+      where: { user_id: session.user.id, id: commentid },
+    });
+    return favouritedProject;
+  }
+
   async getOneProjectComment(
     session: any,
     projectid: number,
@@ -126,6 +134,15 @@ export class CommentService {
       comment: comment,
     });
     return favouritedProject;
+  }
+
+  async addRemoveFavouriteCount(id: number, value: number): Promise<Comment> {
+    const comment = await this.commentRepository.findOne({
+      where: { id: id },
+    });
+    comment.favourites += value;
+    const updatedComment = await this.commentRepository.save(comment);
+    return updatedComment;
   }
 
   async delete(id: number): Promise<Comment | undefined> {

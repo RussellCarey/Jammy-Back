@@ -1,14 +1,15 @@
 import {
   Controller,
   UseGuards,
-  Request,
   Body,
   Get,
   Session,
   Patch,
   Delete,
-  GoneException,
+  Query,
 } from '@nestjs/common';
+import { OrderByPipe } from 'src/pipes/orderby.pipe';
+import { OptionalIntPipe } from 'src/pipes/optionalInt.pipe';
 import { HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.services';
 import { LoggedInGuard } from 'src/common/guards/logged-in.guard';
@@ -19,11 +20,19 @@ import { AdminGuard } from 'src/common/guards/admin.guard';
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  // @UseGuards(AdminGuard)
+  @UseGuards(AdminGuard)
   @Get()
-  async getProfile(@Request() req) {
-    const users = await this.userService.find();
-    return users;
+  async getAllUsers(
+    @Query('skip', OptionalIntPipe) skip?: number,
+    @Query('take', OptionalIntPipe) take?: number,
+    @Query('order', OrderByPipe) order?: Record<string, 'asc' | 'desc'>,
+  ): Promise<any> {
+    const users = await this.userService.getAll({
+      skip,
+      take,
+      order,
+    });
+    return { message: 'Retrieved all users', data: users };
   }
 
   @UseGuards(LoggedInGuard)

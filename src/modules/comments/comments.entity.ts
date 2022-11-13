@@ -15,7 +15,6 @@ import { Jam } from '../jams/jams.entity';
 
 @Entity({ name: 'comment' })
 export class Comment extends BaseEntity {
-  @Index(['project_id', 'user_id', 'commented_user'], { unique: true })
   @Column({ nullable: false })
   user_id: number;
 
@@ -28,6 +27,10 @@ export class Comment extends BaseEntity {
   @Column({ type: 'varchar', length: 200, nullable: false })
   comment: string;
 
+  @Column({ type: 'int', default: 0 })
+  favourites: number;
+
+  // Relations
   @ManyToOne(() => User, (user) => user.comments)
   @JoinColumn()
   user: User;

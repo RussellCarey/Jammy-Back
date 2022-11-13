@@ -1,15 +1,17 @@
 // item.entity.ts
+import { Exclude } from 'class-transformer';
 import { Entity, Column, OneToMany, Index, ManyToMany } from 'typeorm';
 import { IsInt, Length, IsEmail, IsFQDN, IsString } from 'class-validator';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
 import { Comment } from '../comments/comments.entity';
 import { Favourite } from '../favourite/favourite.entity';
+import { Achievement } from '../achievements/achievements.entity';
 
 //TODO - Set up another module for the join table?
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
-  @Index(['email'], { unique: true })
+  @Index(['email', 'github_id'], { unique: true })
   //
   @Column({ type: 'varchar' })
   name: string;
@@ -27,9 +29,11 @@ export class User extends BaseEntity {
   @Length(2, 100)
   email: string;
 
+  @Exclude()
   @Column({ default: false })
   isAdmin: boolean;
 
+  @Exclude()
   @Column({ default: false })
   isBanned: boolean;
 
@@ -37,6 +41,7 @@ export class User extends BaseEntity {
   @IsInt()
   phone_number: number;
 
+  @Exclude()
   @Column({ type: 'varchar', default: 'null' })
   @IsString()
   stripe_customer_token: string;
@@ -58,4 +63,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
+
+  @ManyToMany(() => Achievement, (achievement) => achievement.users)
+  achievements: Achievement[];
 }

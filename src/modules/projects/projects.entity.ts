@@ -7,6 +7,7 @@ import {
   BeforeUpdate,
   OneToMany,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
@@ -15,6 +16,7 @@ import { Comment } from '../comments/comments.entity';
 
 @Entity({ name: 'projects' })
 export class Project extends BaseEntity {
+  @Index(['team_id'])
   @Column({ type: 'varchar', length: 100 })
   project_title: string;
 
@@ -53,6 +55,9 @@ export class Project extends BaseEntity {
 
   @Column({ type: 'int', default: 0 })
   views: number;
+
+  @Column({ type: 'int', default: 0 })
+  favourites: number;
 
   @Column({ nullable: false })
   team_id: number;

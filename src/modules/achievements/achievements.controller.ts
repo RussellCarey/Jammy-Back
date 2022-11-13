@@ -48,25 +48,29 @@ export class AchievementsController {
   }
 
   @UseGuards(AdminGuard)
-  @Patch(':teamId')
+  @Patch(':achievementId')
   async update(
     @Body() body: AchievementUpdateDTO,
-    @Param('teamId', ParseIntPipe) teamId: number,
+    @Param('achievementId', ParseIntPipe) achievementId: number,
   ): Promise<IResponse<Achievement>> {
     const updatedAchievement = await this.achievementService.update(
-      teamId,
+      achievementId,
       body,
     );
     return { message: `Updated an achievement`, data: updatedAchievement };
   }
 
   @UseGuards(AdminGuard)
-  @Delete(':teamId')
-  async deleteUser(@Param('teamId', ParseIntPipe) teamId: number) {
-    const deleteAchievement = await this.achievementService.delete(teamId);
+  @Delete(':achievementId')
+  async deleteUser(
+    @Param('achievementId', ParseIntPipe) achievementId: number,
+  ) {
+    const deleteAchievement = await this.achievementService.delete(
+      achievementId,
+    );
     return {
       data: deleteAchievement,
-      message: 'Deleted an achievement',
+      message: `Deleted an achievement`,
     };
   }
 }

@@ -6,16 +6,17 @@ import {
   BeforeInsert,
   BeforeUpdate,
   CreateDateColumn,
-  ManyToMany,
-  ManyToOne,
+  Index,
 } from 'typeorm';
 import { IsDate } from 'class-validator';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
 import { Comment } from '../comments/comments.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'jams' })
 export class Jam extends BaseEntity {
+  @Index(['launch_date', 'jam_title'])
   @Column({ type: 'varchar', length: 100 })
   jam_title: string;
 
@@ -43,9 +44,11 @@ export class Jam extends BaseEntity {
   @IsDate()
   end_date: Date;
 
+  @Exclude()
   @Column({ default: false })
   is_authorized: boolean;
 
+  @Exclude()
   @Column({ default: false })
   has_started: boolean;
 

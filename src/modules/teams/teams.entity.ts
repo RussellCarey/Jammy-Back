@@ -7,6 +7,7 @@ import {
   JoinColumn,
   ManyToMany,
   ManyToOne,
+  Index,
 } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { User } from '../users/users.entity';
@@ -15,6 +16,7 @@ import { Project } from '../projects/projects.entity';
 
 @Entity({ name: 'teams' })
 export class Team extends BaseEntity {
+  @Index(['team_name', 'project_id'])
   @Column({ type: 'varchar', length: 100 })
   team_name: string;
 

@@ -7,6 +7,7 @@ import { Comment } from '../comments/comments.entity';
 
 @Entity({ name: 'favourite' })
 export class Favourite extends BaseEntity {
+  @Index(['user_id', 'project_id', 'comment_id'], { unique: true })
   @Column({ nullable: false })
   user_id: number;
 

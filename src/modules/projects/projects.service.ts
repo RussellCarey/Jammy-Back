@@ -73,6 +73,15 @@ export class ProjectServices {
     return result.raw[0];
   }
 
+  async addRemoveFavouriteCount(id: number, value: number): Promise<Project> {
+    const project = await this.projectRepository.findOne({
+      where: { id: id },
+    });
+    project.favourites += value;
+    const updatedProject = await this.projectRepository.save(project);
+    return updatedProject;
+  }
+
   async delete(id: number): Promise<Project | undefined> {
     const deletedProjet = await this.projectRepository.delete(id);
     return deletedProjet.raw[0];

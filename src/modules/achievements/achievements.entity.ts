@@ -6,7 +6,6 @@ import {
   OneToOne,
   JoinColumn,
   ManyToMany,
-  ManyToOne,
 } from 'typeorm';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { User } from '../users/users.entity';
@@ -23,7 +22,8 @@ export class Achievement extends BaseEntity {
   @Column({ type: 'varchar', length: 300 })
   image: string;
 
-  @ManyToMany(() => User, (user) => user.teams)
+  // Relations
+  @ManyToMany(() => User, (user) => user.achievements)
   @JoinTable()
   users: User[];
 

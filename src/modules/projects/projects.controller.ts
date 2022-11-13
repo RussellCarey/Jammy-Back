@@ -9,8 +9,6 @@ import {
   Patch,
   UseGuards,
   Delete,
-  Session,
-  HttpStatus,
 } from '@nestjs/common';
 import { LoggedInGuard } from 'src/common/guards/logged-in.guard';
 import { OrderByPipe } from 'src/pipes/orderby.pipe';

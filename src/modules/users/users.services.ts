@@ -23,9 +23,19 @@ export class UsersService {
     return this.userRepository.findOne({ where: { id: id } });
   }
 
-  async find(): Promise<User[] | undefined> {
-    const users = await this.userRepository.find();
-    return users;
+  async getAll(params: {
+    order?: any;
+    skip?: number;
+    take?: number;
+    where?: any;
+  }): Promise<User[]> {
+    const { skip, take, order } = params;
+    const jam = await this.userRepository.find({
+      skip,
+      take,
+      order,
+    });
+    return jam;
   }
 
   async save(user: UserDTO): Promise<User | undefined> {
