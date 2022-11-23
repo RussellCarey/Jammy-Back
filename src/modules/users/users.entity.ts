@@ -54,6 +54,10 @@ export class User extends BaseEntity {
   @IsFQDN()
   image: string;
 
+  @Column({ type: 'varchar', length: 50, default: null })
+  @IsString()
+  last_ip: string;
+
   // Relations
   @ManyToMany(() => Team, (team) => team.users)
   teams: Team[];
