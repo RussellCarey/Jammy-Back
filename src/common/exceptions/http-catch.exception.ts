@@ -1,4 +1,3 @@
-
 import 'dotenv/config';
 import {
   ArgumentsHost,
@@ -8,6 +7,7 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
+import { configService } from 'src/config/config.service';
 
 @Catch(HttpException)
 export class HttpErrorFilter implements ExceptionFilter {
@@ -50,15 +50,15 @@ export class HttpErrorFilter implements ExceptionFilter {
       message,
     };
 
+    const errorResponse = configService.isProduction()
+      ? prodErrorResponse
+      : devErrorResponse;
+
     this.logger.log(
-      `request method: ${request.method} request url${request.url}`,
-      JSON.stringify(devErrorResponse),
+      `request method: ${request.method}.. request url${request.url}`,
+      JSON.stringify(errorResponse),
     );
 
-    response
-      .status(statusCode)
-      .json(
-        process.env.NODE_ENV === 'DEV' ? devErrorResponse : prodErrorResponse,
-      );
+    response.status(statusCode).json(errorResponse);
   }
 }

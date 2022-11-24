@@ -7,6 +7,7 @@ export const createSessionUser = (user: User) => {
     name: user.name,
     github_username: user.github_username,
     email: user.email,
+    isAdmin: user.isAdmin,
   };
 };
 
