@@ -19,14 +19,14 @@ const swaggerConfig = new DocumentBuilder()
   .build();
 
 const sessionConfig = {
-  name: 'SESH_ID',
+  name: '_jammy_slice',
   store: createRedisStorage(configService),
   secret: process.env.SESSION_KEY,
   resave: false,
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7,
-    secure: false,
+    secure: configService.isProduction() ? true : false,
   },
 };
 
@@ -53,4 +53,5 @@ async function bootstrap() {
   console.log(configService.isProduction());
   await app.listen(process.env.PORT);
 }
+
 bootstrap();

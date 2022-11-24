@@ -22,6 +22,10 @@ export class UsersService {
     return this.userRepository.findOne({ where: { id: id } });
   }
 
+  async findOneByGithubId(id: string): Promise<User | undefined> {
+    return this.userRepository.findOne({ where: { github_id: id } });
+  }
+
   async getAll(params: {
     order?: any;
     skip?: number;

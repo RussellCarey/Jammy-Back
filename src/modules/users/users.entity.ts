@@ -1,7 +1,21 @@
 // item.entity.ts
 import { Exclude } from 'class-transformer';
-import { Entity, Column, OneToMany, Index, ManyToMany } from 'typeorm';
-import { IsInt, Length, IsEmail, IsFQDN, IsString } from 'class-validator';
+import {
+  Entity,
+  Column,
+  OneToMany,
+  Index,
+  ManyToMany,
+  CreateDateColumn,
+} from 'typeorm';
+import {
+  IsInt,
+  Length,
+  IsEmail,
+  IsFQDN,
+  IsString,
+  IsDate,
+} from 'class-validator';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Team } from '../teams/teams.entity';
 import { Comment } from '../comments/comments.entity';
@@ -57,6 +71,14 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 50, default: null })
   @IsString()
   last_ip: string;
+
+  @Column({ type: 'int', default: 0 })
+  @IsInt()
+  sign_in_count: number;
+
+  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @IsDate()
+  last_login: Date;
 
   // Relations
   @ManyToMany(() => Team, (team) => team.users)

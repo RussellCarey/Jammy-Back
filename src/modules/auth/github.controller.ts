@@ -9,20 +9,20 @@ import {
 } from '@nestjs/common';
 import { IResponse } from 'src/common/interfaces/response.interface';
 import { UsersService } from '../users/users.services';
-import { Octokit } from 'octokit';
-import { User } from '../users/users.entity';
 import {
   createSessionUser,
-  getPrimaryEmail,
-  getAccessToken,
+  getPrimaryEmailFromReq,
+  getNowTimeString,
+  buildNewUser,
 } from './utils/github';
+import { getAccessToken, getUserData, emailReq } from './services/services';
 
 @Controller('github')
 export class GitController {
   constructor(private readonly userServices: UsersService) {}
 
   @Get(':code')
-  async searchForProjectByName(
+  async loginGithubUser(
     @Request() req,
     @Session() session: Record<string, any>,
     @Param('code') sessionCode?: string,
@@ -30,24 +30,32 @@ export class GitController {
     const tokenReq = await getAccessToken(sessionCode);
     const accessToken = tokenReq.data.split('=')[1].split('&')[0];
 
-    const octokit = new Octokit({
-      auth: accessToken,
-    });
-
-    const userReq = await octokit.request('GET /user', {});
+    // Get user data from github via code returned from login
+    const userReq = await getUserData(accessToken);
+    if (userReq.status !== 200) {
+      throw new HttpException(
+        { message: 'Failed to get user data from Github.' },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
     const userData = userReq.data;
-    const primaryEmail = await getPrimaryEmail(octokit);
-    const existingUser = await this.userServices.findOneByEmail(primaryEmail);
 
+    // Check for existing user using the returned github ID
+    const existingUser = await this.userServices.findOneByGithubId(userData.id);
+
+    // If no user, get email using API and crate new user with GH details.
     if (!existingUser) {
-      const newUser = new User();
-      newUser.name = userData.name;
-      newUser.github_id = userData.id.toString();
-      newUser.github_username = userData.login;
-      newUser.email = primaryEmail;
-      newUser.image = userData.avatar_url;
-      newUser.location = userData.location;
-      newUser.last_ip = req.ip || req.connection.remoteAddress;
+      const emailRequest = await emailReq(accessToken);
+
+      if (emailRequest.status !== 200) {
+        throw new HttpException(
+          { message: 'Failed to get data user email from Github.' },
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+
+      const primaryEmail = getPrimaryEmailFromReq(emailRequest);
+      const newUser = buildNewUser(userData, primaryEmail, req.ip);
       const savedUser = await this.userServices.save(newUser);
 
       if (!savedUser)
@@ -57,19 +65,23 @@ export class GitController {
         );
 
       session.user = createSessionUser(newUser);
-    } else {
-      existingUser.last_ip = req.ip || req.connection.remoteAddress;
-      const updatedUser = await this.userServices.save(existingUser);
-
-      if (!updatedUser)
-        throw new HttpException(
-          { message: 'Used could not be updated' },
-          HttpStatus.NOT_MODIFIED,
-        );
-
-      session.user = createSessionUser(existingUser);
+      return { message: 'Logged in.', data: session.user };
     }
 
+    // If existing user, add sign in data to the user and save, then return.
+    existingUser.last_ip = req.ip || req.connection.remoteAddress;
+    existingUser.sign_in_count += 1;
+    existingUser.last_login = getNowTimeString();
+
+    const updatedUser = await this.userServices.save(existingUser);
+
+    if (!updatedUser)
+      throw new HttpException(
+        { message: 'Used could not be updated' },
+        HttpStatus.NOT_MODIFIED,
+      );
+
+    session.user = createSessionUser(existingUser);
     return { message: 'Logged in.', data: session.user };
   }
 }
